@@ -1,0 +1,22 @@
+# Base image
+ARG PARENT
+FROM ${PARENT}
+
+RUN apt-get install -y ros-${ROS_DISTRO}-ackermann-msgs
+
+# NOTE: Add any additional package you need here
+
+# Creating a catkin workspace
+RUN mkdir -p /catkin_ws/src
+
+# Copying
+COPY ./pkg /catkin_ws/src/pkg
+
+## Building your ROS packages
+RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; cd catkin_ws; catkin_make; source devel/setup.bash"
+
+# Uncomment set the shell to bash to provide the "source" command
+SHELL ["/bin/bash", "-c"]
+
+# Setting entry point command that runs when the container is brought up
+CMD source /catkin_ws/devel/setup.bash; roslaunch --wait pkg f1tenth_gym_agent.launch
