@@ -1,39 +1,51 @@
-# The F1TENTH Gym environment
+# The F1TENTH - Riders
 
-This is a fork of the [F1TENTH Gym Repository](https://github.com/f1tenth/f1tenth_gym) designed to be as lightweight as possible.
+This repo enables working with F1Tenth Gym & Riders.
 
-## Prerequisites
+**TODO:** Add explanations from f1tenth_gym_quickstart here.
 
-### Required
+## Installation
 
-* [Python](https://realpython.com/installing-python/)
+### Local Development with F1Tenth Gym
 
-### Recommended
-
-* [Visual Studio Code](https://www.toolsqa.com/blogs/install-visual-studio-code/)
-* [git](https://www.atlassian.com/git/tutorials/install-git)
-
-## Quickstart
-
-Clone this repository. If you don't want to use git, you may alternatively [download](https://github.com/davidnugent2425/f1tenth_gym/archive/main.zip) this repository as a zip file (you will then have to extract and rename the folder).
+First clone this repository:
 
 ```bash
-$ git clone https://github.com/FT-Autonomous/f1tenth-gym-quickstart.git
+git clone https://gitlab.com/acrome-colab/riders-poc/f1tenth-gym-quickstart
+cd f1tenth-gym-quickstart
+pip install --user -e gym
 ```
 
-Go into the repository and install the required packages. If you don't want to use the command line to navigate to the repository, you may open the folder in Visual Studio Code or another code editor of your choice. Note: [pip](https://pypi.org/project/pip/) is a package manager for Python packages.
-
-```
-$ cd f1tenth_gym
-$ pip install --user -e gym/
-```
-
-Then to make sure it's working, go into the src directory and run the simulator
+Finally, check if the repo is working properly:
 
 ```bash
-$ cd src
-$ python simulator.py
+cd pkg/src
+python -m pkg.main
 ```
+
+### Testing with Docker
+
+First build required images:
+
+```bash
+docker-compose build roscore bridge agent
+```
+
+Start ROSCore & F1Tenth ROS Bridge:
+
+```bash
+docker-compose up --force-recreate roscore-dev bridge-dev
+```
+
+Go to http://localhost:6080 , if everything worked properly until now, you should see RViz window. 
+Finally, launch agent:   
+
+```bash
+docker-compose up --force-recreate agent-dev
+``` 
+
+You should see your agent moving in a single direction and crashing to wall in ~2.9 seconds.
+
 
 ## Making your own Driver
 

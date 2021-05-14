@@ -98,8 +98,6 @@ class GapFollower:
 class SimpleDriver:
 
     def process_lidar(self, ranges):
-        import time
-        print (time.time())
         speed = 5.0
         steering_angle = 0.0
         return speed, steering_angle

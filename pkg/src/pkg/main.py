@@ -13,7 +13,7 @@ sys.path.append(current_dir)
 from pkg.drivers import GapFollower, SimpleDriver
 
 # choose your drivers here (1-4)
-drivers = [GapFollower(), GapFollower()]
+drivers = [SimpleDriver()]
 
 # choose your racetrack here (TRACK_1, TRACK_2, TRACK_3, OBSTACLES)
 RACETRACK = 'TRACK_1'
@@ -33,6 +33,7 @@ class GymRunner(object):
 
         # specify starting positions of each agent
         poses = np.array([[-1.25 + (i * 0.75), 0., np.radians(90)] for i in range(len(drivers))])
+
         obs, step_reward, done, info = env.reset(poses=poses)
         env.render()
 

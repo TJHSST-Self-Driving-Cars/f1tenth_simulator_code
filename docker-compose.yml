@@ -34,17 +34,6 @@ services:
       # expose ROSCORE port to Out
       - 11311:11311
 
-  rviz:
-    <<: *roscore
-    volumes:
-      - ./compose/rviz/start.sh:/start.sh
-      - ./compose/rviz/f1tenth.rviz:/f1tenth.rviz
-    ports:
-      # expose NoVNC port to Out
-      - 6080:6080
-    environment:
-      - ROS_MASTER_URI=http://host.docker.internal:11311
-
   bridge: &bridge
     image: f1tenth-riders-bridge
     build:
@@ -57,8 +46,10 @@ services:
     <<: *bridge
     stdin_open: true
     ports:
-      - 6081:6081
+      - 6080:6080
     volumes:
+      - ./f1tenth_gym_ros:/catkin_ws/src/f1tenth_gym_ros
+      - ./compose/bridge/f1tenth.rviz:/f1tenth.rviz
       - ./compose/bridge/start.sh:/start.sh
     environment: 
       - ROS_MASTER_URI=http://host.docker.internal:11311
@@ -69,14 +60,12 @@ services:
       - EGO_ID=icart_id
       # - OPP_ID=opp_id
       # Starting pose for both of the cars, also a map parameter
-      - EGO_STARTING_X=0.0
+      - EGO_STARTING_X=-1.25
       - EGO_STARTING_Y=0.0
-      - EGO_STARTING_THETA=-0.5
+      - EGO_STARTING_THETA=1.57079633
       - OPP_STARTING_X=0.0
       - OPP_STARTING_Y=2.0
-      - OPP_STARTING_THETA=-0.5
-      # the executable path of the C++ backend of gym, should NOT be changed unless you know what you're doing
-      - F1TENTH_EXEC_DIR=/f1tenth_gym/build/
+      - OPP_STARTING_THETA=1.5
 
   agent: &agent
     image: f1tenth-riders-agent

@@ -15,7 +15,8 @@ RUN apt-get install -y libzmq3-dev \
                        vim \
                        ros-${ROS_DISTRO}-ackermann-msgs \
                        ros-${ROS_DISTRO}-map-server \
-                       ros-${ROS_DISTRO}-genpy
+                       ros-${ROS_DISTRO}-genpy \
+                       ros-${ROS_DISTRO}-rviz
 
 RUN cp -r /usr/include/eigen3/Eigen /usr/include
 
@@ -52,8 +53,10 @@ RUN cd f1tenth_gym && cp ./build/sim_requests_pb2.py ./gym/ && pip install -e gy
 
 # Install F1Tenth GYM Bridge
 RUN mkdir -p /catkin_ws/src
-RUN git clone -b docker_agent --depth=1 https://github.com/f1tenth/f1tenth_gym_ros /catkin_ws/src/f1tenth_gym_ros
+COPY ./f1tenth_gym_ros /catkin_ws/src/f1tenth_gym_ros
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; cd catkin_ws; catkin_make; source devel/setup.bash"
+
+ENV F1TENTH_EXEC_DIR=/f1tenth_gym/build/
 
 COPY ./compose/bridge/start.sh /start.sh
 RUN chmod +x /start.sh

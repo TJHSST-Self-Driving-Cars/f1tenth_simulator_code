@@ -42,7 +42,6 @@ class ROSRunner:
 
 if __name__ == "__main__":
     agent_name = os.environ.get("F1TENTH_AGENT_NAME")
-    print (agent_name)
 
     runner = ROSRunner(Driver(), agent_name)
 
