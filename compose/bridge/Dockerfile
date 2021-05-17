@@ -46,6 +46,8 @@ RUN pip install numpy==1.16.0 \
                 llvmlite==0.31.0 \
                 numba==0.47.0
 
+RUN apt install -y python3-pip && pip3 install numpy
+
 # Install F1Tenth GYM
 RUN git clone -b cpp_backend_archive --depth=1 https://github.com/f1tenth/f1tenth_gym /f1tenth_gym
 RUN cd f1tenth_gym && mkdir build && cd build && cmake .. && make
