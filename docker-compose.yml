@@ -8,9 +8,11 @@ services:
       context: .
       dockerfile: compose/vnc/Dockerfile
       args: 
-        - PARENT=ros:melodic-robot-bionic
-        - ROS_DISTRO=melodic
-  
+#        - PARENT=ros:melodic-robot-bionic
+        - PARENT=ros:noetic-robot-focal
+#        - ROS_DISTRO=melodic
+        - ROS_DISTRO=noetic
+
   vnc-dev:
     <<: *vnc
     stdin_open: true

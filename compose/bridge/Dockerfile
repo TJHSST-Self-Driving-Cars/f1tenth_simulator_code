@@ -1,10 +1,7 @@
 ARG PARENT
 FROM ${PARENT}
 
-RUN apt-get update --fix-missing && \
-    apt-get install -y \
-    python-pip
-
+RUN apt-get update --fix-missing
 RUN apt-get install -y libzmq3-dev \
                        git \
                        build-essential \
@@ -33,25 +30,14 @@ RUN git clone https://github.com/protocolbuffers/protobuf.git && \
     cd .. && \
     rm -r protobuf
 
-RUN pip install --upgrade pip
-
-RUN pip install numpy==1.16.0 \
-                scipy==1.2.0 \
-                zmq \
-                pyzmq \
-                Pillow \
-                gym \
-                protobuf==3.8.0 \
-                pyyaml \
-                llvmlite==0.31.0 \
-                numba==0.47.0
-
 RUN apt install -y python3-pip && pip3 install numpy
 
 # Install F1Tenth GYM
-RUN git clone -b cpp_backend_archive --depth=1 https://github.com/f1tenth/f1tenth_gym /f1tenth_gym
-RUN cd f1tenth_gym && mkdir build && cd build && cmake .. && make
-RUN cd f1tenth_gym && cp ./build/sim_requests_pb2.py ./gym/ && pip install -e gym/
+#RUN git clone -b cpp_backend_archive --depth=1 https://github.com/f1tenth/f1tenth_gym /f1tenth_gym
+#RUN cd f1tenth_gym && mkdir build && cd build && cmake .. && make
+#RUN cd f1tenth_gym && cp ./build/sim_requests_pb2.py ./gym/ && pip install -e gym/
+COPY ./gym /f1tenth/gym
+RUN pip install -e /f1tenth/gym/
 
 # Install F1Tenth GYM Bridge
 RUN mkdir -p /catkin_ws/src
