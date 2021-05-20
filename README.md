@@ -46,7 +46,7 @@ Start ROSCore & F1Tenth ROS Bridge:
 docker-compose up --force-recreate roscore-dev bridge-dev
 ```
 
-Go to http://localhost:6080 , if everything worked properly until now, you should see RViz window. 
+Go to http://localhost:6080 , if everything worked properly until now, you should see simulator window. 
 Finally, launch agent:   
 
 ```bash
@@ -60,7 +60,7 @@ You should see your agent moving in a single direction and crashing to wall in ~
 
 ### Structure of a Driver
 
-Let's take a look at the most basic Driver, which is in the file [starting_point.py](./src/starting_point.py)
+Let's take a look at the most basic Driver, which is in the file [drivers.py](./pkg/src/pkg/drivers.py)
 
 ```python
 class SimpleDriver:    
@@ -79,7 +79,7 @@ A Driver is just a class that has a ```process_lidar``` function which takes in 
 
 ### Choosing a Driver
 
-Let's look at the [simulator.py](./src/simulator.py) file. The section shown below is all we need to worry about.
+Let's look at the [main.py](./pkg/src/pkg/main.py) file. The section shown below is all we need to worry about.
 
 ```python
 ...
@@ -110,13 +110,13 @@ RACETRACK = 'TRACK_1'
 ...
 ```
 
-Now if you run the simulator.py file again, it uses our SimpleDriver
+Now if you run the main.py file again, it uses our SimpleDriver
 
 ```bash
-$ python simulator.py
+$ python main.py
 ```
 
-To see some more complex processing, take a look at the GapFollower Driver in [follow_the_gap.py](./src/follow_the_gap.py) which implements the [Follow The Gap Method](https://www.youtube.com/watch?v=7VLYP-z9hTw&ab_channel=Real-TimemLABUPenn)! Notice that it still has a ```process_lidar``` function which takes in LiDAR data and returns a speed and steering angle. That's all we'll ever need.
+To see some more complex processing, take a look at the GapFollower Driver which implements the [Follow The Gap Method](https://www.youtube.com/watch?v=7VLYP-z9hTw&ab_channel=Real-TimemLABUPenn)! Notice that it still has a ```process_lidar``` function which takes in LiDAR data and returns a speed and steering angle. That's all we'll ever need.
 
 ### Multi-Agent Racing
 
