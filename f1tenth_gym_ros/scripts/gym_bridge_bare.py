@@ -66,7 +66,7 @@ class GymBridge(object):
                             map_ext=self.map_img_ext, num_agents=driver_count)
 
         # init gym backend
-        poses = [[-1.25 + (i * 0.75), 0., np.radians(90)] for i in range(driver_count)]
+        poses = [[0. + (i * 0.75), 0. - (i*1.5), np.radians(60)] for i in range(driver_count)]
         self.obs, _, self.done, _ = self.env.reset(poses=np.array(poses))
 
         if os.environ.get("DISPLAY"):

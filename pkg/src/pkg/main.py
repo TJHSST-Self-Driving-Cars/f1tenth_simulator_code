@@ -16,7 +16,7 @@ from pkg.drivers import GapFollower, SimpleDriver
 drivers = [SimpleDriver()]
 
 # choose your racetrack here (TRACK_1, TRACK_2, TRACK_3, OBSTACLES)
-RACETRACK = 'TRACK_1'
+RACETRACK = 'SILVERSTONE'
 
 
 class GymRunner(object):
@@ -32,7 +32,7 @@ class GymRunner(object):
                        map_ext=".png", num_agents=len(drivers))
 
         # specify starting positions of each agent
-        poses = np.array([[-1.25 + (i * 0.75), 0., np.radians(90)] for i in range(len(drivers))])
+        poses = np.array([[0. + (i * 0.75), 0. - (i*1.5), np.radians(60)] for i in range(len(drivers))])
 
         obs, step_reward, done, info = env.reset(poses=poses)
         env.render()
