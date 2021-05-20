@@ -3,7 +3,7 @@ version: '3'
 services:
 
   vnc: &vnc
-    image: f1tenth-riders-vnc
+    image: registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart/vnc:latest
     build:
       context: .
       dockerfile: compose/vnc/Dockerfile
@@ -19,11 +19,11 @@ services:
       - "6080:6080"
 
   roscore: &roscore
-    image: f1tenth-riders-roscore
+    image: registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart/roscore:latest
     build: 
       context: compose/roscore
       args: 
-        - PARENT=f1tenth-riders-vnc
+        - PARENT=registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart/vnc:latest
   
   roscore-dev:
     <<: *roscore
@@ -35,12 +35,12 @@ services:
       - 11311:11311
 
   bridge: &bridge
-    image: f1tenth-riders-bridge
+    image: registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart/bridge:latest
     build:
       context: .
       dockerfile: compose/bridge/Dockerfile
       args: 
-        - PARENT=f1tenth-riders-vnc
+        - PARENT=registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart/vnc:latest
 
   bridge-dev:
     <<: *bridge
@@ -67,7 +67,7 @@ services:
       context: .
       dockerfile: compose/agent/Dockerfile
       args:
-        - PARENT=f1tenth-riders-roscore
+        - PARENT=registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart/roscore:latest
 
   agent-dev:
     <<: *agent
