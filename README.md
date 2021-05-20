@@ -31,6 +31,15 @@ First build required images:
 docker-compose build roscore bridge agent
 ```
 
+Create an `.env` file at the root of the project with following contents:
+
+```bash
+RACE_MAP_PATH=/catkin_ws/src/f1tenth_gym_ros/maps/TRACK_1.yaml
+RACE_MAP_IMG_EXT=.png
+F1TENTH_AGENT_NAME=a1
+F1TENTH_AGENT_IMAGE=a1
+```
+
 Start ROSCore & F1Tenth ROS Bridge:
 
 ```bash
