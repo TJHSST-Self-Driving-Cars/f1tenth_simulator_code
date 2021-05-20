@@ -11,3 +11,5 @@ docs/_build/
 
 # Additional files
 .env
+venv/**/*
+challengeproject.tar
