@@ -11,7 +11,7 @@ This repo enables working with F1Tenth Gym & Riders.
 First clone this repository:
 
 ```bash
-git clone https://gitlab.com/acrome-colab/riders-poc/f1tenth-gym-quickstart
+git clone https://gitlab.com/acrome-colab/riders-poc/f1tenth-gym-quickstart --config core.autocrlf=input
 cd f1tenth-gym-quickstart
 pip install --user -e gym
 ```
