@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from ackermann_msgs.msg import AckermannDriveStamped
@@ -6,7 +6,7 @@ from sensor_msgs.msg import LaserScan
 import numpy as np
 import os
 
-from pkg.drivers import GapFollower as Driver
+from pkg.drivers import SimpleDriver as Driver
 
 """
 NOTE: Following code enables F1Tenth - Docker - ROS integration.  
@@ -31,6 +31,8 @@ class ROSRunner:
         self.pub_drive.publish(msg)
 
     def run(self):
+        print ("agent_name", agent_name)
+
         rospy.init_node('gym_agent_%s' % self.agent_name, anonymous=True)
         self.pub_drive = rospy.Publisher('/%s/drive' % self.agent_name, AckermannDriveStamped, queue_size=5)
 
@@ -42,8 +44,6 @@ class ROSRunner:
 
 if __name__ == "__main__":
     agent_name = os.environ.get("F1TENTH_AGENT_NAME")
-
     runner = ROSRunner(Driver(), agent_name)
-
     # launch
     runner.run()

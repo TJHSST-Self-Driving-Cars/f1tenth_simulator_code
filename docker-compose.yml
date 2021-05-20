@@ -8,9 +8,7 @@ services:
       context: .
       dockerfile: compose/vnc/Dockerfile
       args: 
-#        - PARENT=ros:melodic-robot-bionic
         - PARENT=ros:noetic-robot-focal
-#        - ROS_DISTRO=melodic
         - ROS_DISTRO=noetic
 
   vnc-dev:
@@ -59,18 +57,12 @@ services:
       - RACE_MAP_IMG_EXT=${RACE_MAP_IMG_EXT}
       # Scenario: 0 for single car timed trial (qualifying), 1 for dual car racing (grand prix)
       - RACE_SCENARIO=0
-      - EGO_ID=icart_id
-      # - OPP_ID=opp_id
-      # Starting pose for both of the cars, also a map parameter
-      - EGO_STARTING_X=-1.25
-      - EGO_STARTING_Y=0.0
-      - EGO_STARTING_THETA=1.57079633
-      - OPP_STARTING_X=0.0
-      - OPP_STARTING_Y=2.0
-      - OPP_STARTING_THETA=1.5
+      - EGO_ID=${F1TENTH_AGENT_NAME}
+      # Ignored if RACE_SCENARIO=0, used if RACE_SCENARIO=1
+      - OPP_ID=${F1TENTH_OPP_NAME}
 
   agent: &agent
-    image: f1tenth-riders-agent
+    image: ${F1TENTH_AGENT_IMAGE}
     build:
       context: .
       dockerfile: compose/agent/Dockerfile
@@ -81,6 +73,14 @@ services:
     <<: *agent
     environment:
       - ROS_MASTER_URI=http://host.docker.internal:11311
-      - F1TENTH_AGENT_NAME=icart_id
+      - F1TENTH_AGENT_NAME=${F1TENTH_AGENT_NAME}
     volumes:
       - ./pkg:/catkin_ws/src/pkg
+
+#  opp-dev:
+#    <<: *agent
+#    environment:
+#      - ROS_MASTER_URI=http://host.docker.internal:11311
+#      - F1TENTH_AGENT_NAME=${F1TENTH_OPP_NAME}
+#    volumes:
+#      - ./pkg:/catkin_ws/src/pkg

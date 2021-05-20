@@ -2,9 +2,7 @@
 ARG PARENT
 FROM ${PARENT}
 
-RUN apt-get install -y ros-${ROS_DISTRO}-ackermann-msgs
-
-# NOTE: Add any additional package you need here
+RUN apt-get update && apt-get install -y ros-${ROS_DISTRO}-ackermann-msgs
 
 # Creating a catkin workspace
 RUN mkdir -p /catkin_ws/src
