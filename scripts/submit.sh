@@ -76,6 +76,7 @@ curl --location \
     -F description="$description" \
     -F challenge=$CHALLENGE_ID \
     -F token='Token '$RIDERS_AUTH_TOKEN \
+    -F api_host=$RIDERS_API_HOST \
     "$F1TENTH_RIDERS_API"
 
 #if [ $F1TENTH_STATUS_CODE == "403" ]; then
