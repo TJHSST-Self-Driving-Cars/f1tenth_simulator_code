@@ -68,13 +68,13 @@ printf "\n\nPlease enter a short description of your submission. This would help
 echo -n "Description:"
 read description
 
-F1TENTH_RIDERS_API="$F1TENTH_RIDERS_HOST"'/update'
+F1TENTH_RIDERS_API="$RIDERS_F1TENTH_HOST"'/update'
 
 # TODO: Fix arbitrary constants
 curl --location \
     -F 'file=@./challengeproject.tar' \
     -F description="$description" \
-    -F challenge=$CHALLENGE_ID \
+    -F challenge=$RIDERS_CHALLENGE_ID \
     -F token='Token '$RIDERS_AUTH_TOKEN \
     -F api_host=$RIDERS_API_HOST \
     "$F1TENTH_RIDERS_API"

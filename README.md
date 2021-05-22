@@ -38,6 +38,9 @@ RACE_MAP_PATH=/catkin_ws/src/f1tenth_gym_ros/maps/SILVERSTONE.yaml
 RACE_MAP_IMG_EXT=.png
 F1TENTH_AGENT_NAME=a1
 F1TENTH_AGENT_IMAGE=a1
+RIDERS_CHALLENGE_ID=40
+RIDERS_API_HOST=https://api.riders.ai
+RIDERS_F1TENTH_HOST=https://f1tenth.riders.ai
 ```
 
 Start ROSCore & F1Tenth ROS Bridge:
