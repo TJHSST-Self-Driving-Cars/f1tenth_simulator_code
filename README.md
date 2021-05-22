@@ -1,6 +1,6 @@
 # The F1TENTH - Riders
 
-Sample project for the [https://riders.ai/challenge/40](Trinity College F1Tenth Challenge). 
+Sample project for the [Trinity College F1Tenth Challenge](https://riders.ai/challenge/40). 
 
 ## Installation
 
