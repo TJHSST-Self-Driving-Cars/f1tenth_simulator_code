@@ -15,7 +15,7 @@ from pkg.drivers import GapFollower, SimpleDriver
 # choose your drivers here (1-4)
 drivers = [SimpleDriver()]
 
-# choose your racetrack here (TRACK_1, TRACK_2, TRACK_3, OBSTACLES)
+# choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
 RACETRACK = 'SILVERSTONE'
 
 

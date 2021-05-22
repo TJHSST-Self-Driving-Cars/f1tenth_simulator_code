@@ -1,8 +1,6 @@
 # The F1TENTH - Riders
 
-This repo enables working with F1Tenth Gym & Riders.
-
-**TODO:** Add explanations from f1tenth_gym_quickstart here.
+Sample project for the [https://riders.ai/challenge/40](Trinity College F1Tenth Challenge). 
 
 ## Installation
 
@@ -25,10 +23,10 @@ python -m pkg.main
 
 ### Testing with Docker
 
-First build required images:
+First build required image:
 
 ```bash
-docker-compose build roscore bridge agent
+docker-compose build agent
 ```
 
 Create an `.env` file at the root of the project with following contents:
@@ -87,13 +85,13 @@ Let's look at the [main.py](./pkg/src/pkg/main.py) file. The section shown below
 ```python
 ...
 # import your drivers here
-from follow_the_gap import GapFollower
+from pkg.drivers import GapFollower
 
 # choose your drivers here (1-4)
 drivers = [GapFollower()]
 
-# choose your racetrack here (TRACK_1, TRACK_2, TRACK_3, OBSTACLES)
-RACETRACK = 'TRACK_1'
+# choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
+RACETRACK = 'SILVERSTONE'
 ...
 ```
 
@@ -102,14 +100,13 @@ As shown in the comments above, we can import Drivers and then choose which ones
 ```python
 ...
 # import your drivers here
-from follow_the_gap import GapFollower
-from starting_point import SimpleDriver
+from pkg.drivers import GapFollower, SimpleDriver
 
 # choose your drivers here (1-4)
 drivers = [SimpleDriver()]
 
-# choose your racetrack here (TRACK_1, TRACK_2, TRACK_3, OBSTACLES)
-RACETRACK = 'TRACK_1'
+# choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
+RACETRACK = 'SILVERSTONE'
 ...
 ```
 
@@ -129,14 +126,13 @@ Here's how we would race GapFollower against SimpleDriver:
 
 ```python
 # import your drivers here
-from follow_the_gap import GapFollower
-from starting_point import SimpleDriver
+from pkg.drivers import GapFollower, SimpleDriver
 
 # choose your drivers here (1-4)
 drivers = [GapFollower(), SimpleDriver()]
 
-# choose your racetrack here (TRACK_1, TRACK_2, TRACK_3, OBSTACLES)
-RACETRACK = 'TRACK_1'
+# choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
+RACETRACK = 'SILVERSTONE'
 ```
 
 ### Changing Map
@@ -145,14 +141,13 @@ There are 3 clear racetracks and 1 obstacles racetrack provided. To switch betwe
 
 ```python
 # import your drivers here
-from follow_the_gap import GapFollower
-from starting_point import SimpleDriver
+from pkg.drivers import GapFollower, SimpleDriver
 
 # choose your drivers here (1-4)
 drivers = [GapFollower()]
 
-# choose your racetrack here (TRACK_1, TRACK_2, TRACK_3, OBSTACLES)
-RACETRACK = 'OBSTACLES'
+# choose your racetrack here (SILVERSTONE, SILVERSTONE_OBS)
+RACETRACK = 'SILVERSTONE_OBS'
 ```
 
 ## Known issues (from original repo)
