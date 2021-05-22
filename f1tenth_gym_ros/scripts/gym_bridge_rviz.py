@@ -88,7 +88,7 @@ class GymBridge(object):
         self.racecar_env.update_params(mu, h_cg, l_r, cs_f, cs_r, I_z, mass, exec_dir, double_finish=True)
 
         driver_count = 2 if self.race_scenario > 0 else 1
-        poses = [[-1.25 + (i * 0.75), 0., np.radians(90)] for i in range(driver_count)]
+        poses = [[0. + (i * 0.75), 0. - (i*1.5), np.radians(60)] for i in range(driver_count)]
         if driver_count == 1:
             poses.append([200.0, 200.0, 0.0])
 
