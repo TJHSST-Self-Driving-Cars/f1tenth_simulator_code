@@ -19,7 +19,7 @@ SCRIPT_DIR=$(dirname "$0")
 cd $SCRIPT_DIR/..
 
 set -a # automatically export all variables
-source .env
+source ./.env
 set +a
 
 printf "\nRetrieving your API Token...\n"
