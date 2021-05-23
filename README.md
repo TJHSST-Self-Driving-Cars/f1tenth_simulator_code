@@ -9,7 +9,7 @@ Sample project for the [Trinity College F1Tenth Challenge](https://riders.ai/cha
 First clone this repository:
 
 ```bash
-git clone https://gitlab.com/acrome-colab/riders-poc/f1tenth-gym-quickstart --config core.autocrlf=input
+git clone https://gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart --config core.autocrlf=input
 cd f1tenth-gym-quickstart
 pip install --user -e gym
 ```
