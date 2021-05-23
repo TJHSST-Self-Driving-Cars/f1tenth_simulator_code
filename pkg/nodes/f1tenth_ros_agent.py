@@ -6,7 +6,7 @@ from sensor_msgs.msg import LaserScan
 import numpy as np
 import os
 
-from pkg.drivers import SimpleDriver as Driver
+from pkg.drivers import DisparityExtender as Driver
 
 """
 NOTE: Following code enables F1Tenth - Docker - ROS integration.  
