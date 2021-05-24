@@ -54,8 +54,7 @@ Finally, launch agent:
 docker-compose up --force-recreate agent-dev
 ``` 
 
-You should see your agent moving in a single direction and crashing to wall in ~2.9 seconds.
-
+You should see your agent moving in a single direction and crashing to wall in ~10 seconds.
 
 ## Making your own Driver
 
