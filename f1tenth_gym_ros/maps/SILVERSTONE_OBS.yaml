@@ -1,6 +1,8 @@
 image: SILVERSTONE_OBS.png
-resolution: 0.15424
-origin: [-178.5,-59.0, 0.000000]
+resolution: 0.07712
+origin: [-90.25,-29.5, 0.000000]
 negate: 0
 occupied_thresh: 0.45
 free_thresh: 0.196
+starting_angle: 1.0471975511965976 # 60 degrees in radians
+default_resolution: 0.07712
