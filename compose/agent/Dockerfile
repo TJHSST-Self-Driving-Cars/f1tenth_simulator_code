@@ -2,6 +2,9 @@
 ARG PARENT
 FROM ${PARENT}
 
+COPY ./compose/ros.asc /ros.asc
+RUN sudo apt-key add /ros.asc
+
 RUN apt-get update && apt-get install -y ros-${ROS_DISTRO}-ackermann-msgs
 
 # Creating a catkin workspace

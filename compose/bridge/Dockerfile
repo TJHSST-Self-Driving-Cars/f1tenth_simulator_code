@@ -1,6 +1,9 @@
 ARG PARENT
 FROM ${PARENT}
 
+COPY ./compose/ros.asc /ros.asc
+RUN sudo apt-key add /ros.asc
+
 RUN apt-get update --fix-missing
 RUN apt-get install -y libzmq3-dev \
                        git \
