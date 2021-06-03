@@ -1,5 +1,6 @@
 import docker
 import os
+from getpass import getpass
 
 SCRIPTS_DIR = os.path.dirname(__file__)
 PROJECT_ROOT = os.path.dirname(SCRIPTS_DIR)
@@ -10,7 +11,7 @@ AGENT_PARENT = "registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quick
 
 def build_agent_image():
     client = docker.from_env()
-    client.build(
+    client.images.build(
         path=PROJECT_ROOT,
         dockerfile=AGENT_DOCKERFILE_PATH,
         tag="a1",
@@ -22,10 +23,18 @@ def build_agent_image():
 
 def build_submit_image():
     client = docker.from_env()
-    client.build(
+    client.images.build(
         path=PROJECT_ROOT,
         dockerfile=SUBMIT_DOCKERFILE_PATH,
         tag="registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart/submit",
+    )
+
+
+def run_submit_image(envs):
+    client = docker.from_env()
+    client.containers.run(
+        "registry.gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart/submit",
+        environment=envs
     )
 
 
@@ -33,38 +42,29 @@ if __name__ == '__main__':
     print("Building your Agent Docker image, this may take a while...")
     build_agent_image()
 
-    input("")
+    print("Image built & tagged successfully.")
+    print("--------------------------------------")
+    print("This script will compile your project & upload to Riders.ai for evaluation.")
+    print("Please enter your Riders.ai Username & Password")
 
-#
-#
-# set -o errexit
-#
-# printf "\n\nBuilding your Agent Docker image, this may take a while...\n"
-#
-# # Try to build agent locally to prevent sending user_projects that fail on build process.
-# docker-compose -f docker-compose.yml build agent
-#
-# unset RIDERS_USERNAME
-# unset RIDERS_PASSWORD
-# unset DESCRIPTION
-#
-# printf "Image built & tagged successfully.\n"
-# printf "\n\nThis script will compile your project & upload to Riders.ai for evaluation.\n"
-# printf "Please enter your Riders.ai Username & Password\n\n"
-#
-# echo -n "Username:"
-# read RIDERS_USERNAME
-# echo -n "Password:"
-# read -s RIDERS_PASSWORD
-#
-# printf "\n\nPlease enter a short description of your submission. This would help you compare separate submissions\n"
-# echo -n "Description:"
-# read DESCRIPTION
-#
-# export RIDERS_USERNAME
-# export RIDERS_PASSWORD
-# export DESCRIPTION
-# docker-compose -f scripts/submit-docker-compose.yml build submit
-# docker-compose -f scripts/submit-docker-compose.yml up submit
-#
-# printf "Submission successful! Please go to https://riders.ai/challenge/40/submissions to validate."
+    username = input("Username: ")
+    password = getpass("Password: ")
+
+    print("--------------------------------------")
+    print("Please enter a short description of your submission. This would help you compare separate submissions")
+    description = input("Description: ")
+
+    print("--------------------------------------")
+    print("Building submit image...")
+    build_submit_image()
+
+    print("Starting submission in Docker")
+    run_submit_image({
+        "RIDERS_USERNAME": username,
+        "RIDERS_PASSWORD": password,
+        "DESCRIPTION": description,
+    })
+
+    print("Submission successful! Please go to https://riders.ai/challenge/40/submissions to validate.")
+    print("Please also visit https://riders.ai/challenge/40/result page"
+          " in 10-15 minutes to view results of your agent.")
