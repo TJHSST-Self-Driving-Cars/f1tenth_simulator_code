@@ -190,6 +190,43 @@ Follow the instructions displayed by the script.
 
 Once it's finished, check the competition page to see how you did! (it may take up to 15 minutes to process your new submission)
 
+## Submission in Windows (With Docker)
+
+If you already have Docker, just run `submit-with-docker.sh` in project root:
+
+```bash
+bash scripts/submit-with-docker.sh
+```
+
+If you don't have Docker or get any error, follow this instructions.
+
+- Visit https://www.docker.com/products/docker-desktop and install Docker Desktop.
+- To be sure, start Docker Desktop from the Windows Start menu. Then, from the Docker menu, select **Settings > General**. If you have installed Docker Desktop successfully, **Use WSL 2 based engine** check box will be checked by default. If not, check and click **Apply & Restart**.
+- After that, visit here https://docs.microsoft.com/en-us/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
+- Perform steps 4-5-6 at the above address
+- Then, to check the WSL mode, run :
+
+```bash
+wsl.exe -l -v
+```
+- Here, you can see the linux distro you installed in step 6. You need to set your chosen distro as default, run:
+
+```bash
+wsl --set-default <distro name>
+```
+
+For example, to set Ubuntu as your default WSL distro, run:
+
+ ```bash
+ wsl --set-default ubuntu
+```
+
+- Installation is done! Finally, run `submit-with-docker.sh` in project root:
+
+```bash
+bash scripts/submit-with-docker.sh
+```
+
 ## Known issues (from original repo)
 
 - If you run the `pip install...` command above and then later change your file structure in some way, you may get errors with `gym` such as `module 'gym' has no attribute 'make'`. The solution to this is to re-run the command `pip install --user -e gym/`.
@@ -214,7 +251,7 @@ If you find this Gym environment useful, please consider citing:
 ```
 @inproceedings{okelly2020f1tenth,
   title={F1TENTH: An Open-source Evaluation Environment for Continuous Control and Reinforcement Learning},
-  author={O¿Kelly, Matthew and Zheng, Hongrui and Karthik, Dhruv and Mangharam, Rahul},
+  author={Oï¿½Kelly, Matthew and Zheng, Hongrui and Karthik, Dhruv and Mangharam, Rahul},
   booktitle={NeurIPS 2019 Competition and Demonstration Track},
   pages={77--89},
   year={2020},
