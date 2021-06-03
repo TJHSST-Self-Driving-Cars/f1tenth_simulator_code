@@ -190,7 +190,7 @@ Follow the instructions displayed by the script.
 
 Once it's finished, check the competition page to see how you did! (it may take up to 15 minutes to process your new submission)
 
-## Submission in Windows (With Docker)
+### Submission in Windows (With Docker)
 
 If you already have Docker, just run `submit-with-docker.sh` in project root:
 
@@ -226,6 +226,17 @@ For example, to set Ubuntu as your default WSL distro, run:
 ```bash
 bash scripts/submit-with-docker.sh
 ```
+
+### Submission in Windows (with Python)
+
+If previous options don't work, you can try to upload with Python script:
+
+```bash
+pip install docker six
+python scripts/submit-with-docker.py
+``` 
+Enter your credentials and this script should start a docker container in backend that completes submission. After submission make sure that you visit Submissions page to validate newly created submission.
+In 15 minutes, visit Results page to view results of your agent.
 
 ## Known issues (from original repo)
 
