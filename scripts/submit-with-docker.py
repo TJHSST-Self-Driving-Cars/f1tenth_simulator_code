@@ -2,7 +2,7 @@ import docker
 import os
 from getpass import getpass
 
-SCRIPTS_DIR = os.path.dirname(__file__)
+SCRIPTS_DIR = os.path.abspath(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPTS_DIR)
 SUBMIT_DOCKERFILE_PATH = os.path.join(PROJECT_ROOT, 'compose', 'submit', 'Dockerfile')
 AGENT_DOCKERFILE_PATH = os.path.join(PROJECT_ROOT, 'compose', 'agent', 'Dockerfile')
