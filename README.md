@@ -1,6 +1,6 @@
 # The F1TENTH - Riders
 
-Sample project for the [Trinity College F1Tenth Challenge](https://riders.ai/challenge/40). 
+Sample project for the F1Tenth challenges, most recent being F1Tenth IROS 2021 (https://riders.ai/challenge/47). 
 
 ## Installation
 
@@ -142,7 +142,7 @@ RACE_MAP_PATH=/catkin_ws/src/f1tenth_gym_ros/maps/SILVERSTONE.yaml
 RACE_MAP_IMG_EXT=.png
 F1TENTH_AGENT_NAME=a1
 F1TENTH_AGENT_IMAGE=a1
-RIDERS_CHALLENGE_ID=40
+RIDERS_CHALLENGE_ID=47
 RIDERS_API_HOST=https://api.riders.ai
 RIDERS_F1TENTH_HOST=https://f1tenth.riders.ai
 ```
