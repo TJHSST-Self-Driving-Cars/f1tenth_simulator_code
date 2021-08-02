@@ -24,7 +24,7 @@ python -m pkg.main
 * Signup to the competition platform [Riders.ai](http://riders.ai/) (if you haven't already)
 * Go to [My Account > Purchases](https://riders.ai/account/purchases)
 * Enter the Redeem Code you have been provided (or ask an organizer for one!)
-* Once the (free) purchase is successful, go to your Riders.ai Dashboard, now you should be able to see F1Tenth Trinity College Challenge there
+* Once the (free) purchase is successful, go to your Riders.ai Dashboard, now you should be able to see F1Tenth IROS 2021 Challenge there
 * Follow that link and click on Join Competition (Note: this creates a Challenge Group, and makes you the admin of that group. If you want multiple people to compete on the same Team, one of you should Join, and then invite the others from Challenge > My Team page).
 
 ## Developing your Driver
