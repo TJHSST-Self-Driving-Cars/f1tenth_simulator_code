@@ -1,6 +1,6 @@
 # The F1TENTH - Riders
 
-Sample project for the F1Tenth challenges, most recent being F1Tenth IROS 2021 (https://riders.ai/challenge/47). 
+Sample project for the F1Tenth challenges, most recent being F1Tenth IROS 2021 (https://riders.ai/challenge/47/f1-tenth-iros-2021/). 
 
 ## Installation
 
