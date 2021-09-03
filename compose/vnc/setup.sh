@@ -34,7 +34,7 @@ ride_display_start() {
   # launch NoVNC server
   BACKUP_PWD=$PWD
   cd /opt/novnc/utils
-  nohup ./launch.sh \
+  nohup ./novnc_proxy \
    --vnc "localhost:${VNC_PORT}" \
    --listen "${NOVNC_PORT}" >/tmp/novnc-${DISPLAY_INT}.log & 2> /dev/null
   cd "${BACKUP_PWD}";
