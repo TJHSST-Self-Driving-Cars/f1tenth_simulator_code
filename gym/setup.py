@@ -6,6 +6,5 @@ setup(name='f110_gym',
       author_email='billyzheng.bz@gmail.com',
       url='https://f1tenth.org',
       install_requires=[
-            'gym',
-            'numpy', 'Pillow', 'scipy', 'numba', 'pyyaml']
+            'gym==0.18.0', 'numpy', 'Pillow', 'scipy', 'numba', 'pyyaml']
       )
