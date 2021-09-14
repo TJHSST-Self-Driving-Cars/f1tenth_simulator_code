@@ -61,27 +61,19 @@ docker-compose build agent
 # We assume this script was placed on the project root. Otherwise we should change directory.
 # Archive tar file with arbitrary filename
 printf "\n\nBuilding TAR file, this may take a while...\n"
-git ls-files | tar Tzcf - challengeproject.tar
+git ls-files | tar Tzcf - challengeproject.tar.gz
 printf "Compiled TAR file for submission.\n"
 
 printf "\n\nPlease enter a short description of your submission. This would help you compare separate submissions\n"
 echo -n "Description:"
 read description
 
-F1TENTH_RIDERS_API="$RIDERS_F1TENTH_HOST"'/update'
+RIDERS_API_SUBMIT="$RIDERS_RIDERS_API_HOST"'/challenge/'"$RIDERS_CHALLENGE_ID"'/submit'
 
 # TODO: Fix arbitrary constants
 curl --location \
-    -F 'file=@./challengeproject.tar' \
+    -F 'file=@./challengeproject.tar.gz' \
     -F description="$description" \
-    -F challenge=$RIDERS_CHALLENGE_ID \
-    -F token='Token '$RIDERS_AUTH_TOKEN \
-    -F api_host=$RIDERS_API_HOST \
-    "$F1TENTH_RIDERS_API"
+    -H "Authorization: TOKEN'" $RIDERS_AUTH_TOKEN"
+    "$RIDERS_API_SUBMIT"
 
-#if [ $F1TENTH_STATUS_CODE == "403" ]; then
-#  echo -e "${RED}Upload Project Failed: User can not join challenge"
-#  exit 1
-#elif [ $F1TENTH_STATUS_CODE == "200" ]; then
-#  echo "Project Has Been Uploaded"
-#fi
