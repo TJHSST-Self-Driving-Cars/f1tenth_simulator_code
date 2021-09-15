@@ -66,7 +66,17 @@ class GymBridge(object):
                             map_ext=self.map_img_ext, num_agents=driver_count)
 
         # init gym backend
-        poses = [[0. + (i * 0.75), 0. - (i*1.5), np.radians(60)] for i in range(driver_count)]
+        # specify starting positions of each agent
+        if driver_count == 1:
+            poses = np.array([[0.8007017, 0.2753365, 4.1421595]])
+        elif driver_count == 2:
+            poses = np.array([
+                [0.8007017, 0.2753365, 4.1421595],
+                [0.8162458, 1.1614572, 4.1446321],
+            ])
+        else:
+            raise ValueError("Max 2 drivers are allowed")
+
         self.obs, _, self.done, _ = self.env.reset(poses=np.array(poses))
 
         if os.environ.get("DISPLAY"):
