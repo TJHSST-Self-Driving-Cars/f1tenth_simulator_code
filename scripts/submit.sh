@@ -86,5 +86,8 @@ curl --location \
     -H "Authorization: TOKEN ${RIDERS_AUTH_TOKEN}" \
     "${RIDERS_API_SUBMIT}"
 
-echo "Submission successful! Please note that it may take up to 15 minutes for your results to show up."
-echo "Visit https://riders.ai/challenge/47/ and then choose <Submissions> from menu".
+
+printf "\n\n----\n\n"
+echo "Submission uploaded successfully!"
+echo "If you'd like to view your results, visit https://riders.ai/challenge/47/ and then choose <Results> from menu."
+echo "Please note that it may take up to 15 minutes for your results to show up."
