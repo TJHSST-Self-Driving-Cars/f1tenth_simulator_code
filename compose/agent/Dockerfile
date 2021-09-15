@@ -17,8 +17,7 @@ RUN chmod +x /catkin_ws/src/pkg/nodes/f1tenth_ros_agent.py
 ## Building your ROS packages
 RUN /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash; cd catkin_ws; catkin_make; source devel/setup.bash"
 
-# Uncomment set the shell to bash to provide the "source" command
-SHELL ["/bin/bash", "-c"]
+COPY ./compose/agent/start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Setting entry point command that runs when the container is brought up
-CMD source /catkin_ws/devel/setup.bash; roslaunch --wait pkg f1tenth_gym_agent.launch
+ENTRYPOINT [ "/start.sh" ]
