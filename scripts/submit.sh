@@ -69,9 +69,9 @@ docker-compose build agent
 
 # We assume this script was placed on the project root. Otherwise we should change directory.
 # Archive tar file with arbitrary filename
-printf "\n\nBuilding TAR file, this may take a while...\n"
+printf "\n\nBuilding TAR GZ file, this may take a while...\n"
 git ls-files | tar Tzcf - challengeproject.tar.gz
-printf "Compiled TAR file for submission.\n"
+printf "Compiled TAR GZ file for submission.\n"
 
 printf "\n\nPlease enter a short description of your submission. This would help you compare separate submissions\n"
 echo -n "Description:"
