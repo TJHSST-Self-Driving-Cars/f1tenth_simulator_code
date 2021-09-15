@@ -68,10 +68,10 @@ class GymBridge(object):
         # init gym backend
         # specify starting positions of each agent
         if driver_count == 1:
-            poses = np.array([[0.8007017, 0.2753365, 4.1421595]])
+            poses = np.array([[0.8007017, -0.2753365, 4.1421595]])
         elif driver_count == 2:
             poses = np.array([
-                [0.8007017, 0.2753365, 4.1421595],
+                [0.8007017, -0.2753365, 4.1421595],
                 [0.8162458, 1.1614572, 4.1446321],
             ])
         else:
