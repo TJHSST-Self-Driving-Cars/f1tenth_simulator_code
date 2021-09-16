@@ -135,6 +135,8 @@ from pkg.drivers import DisparityExtender as Driver
 ...
 ```
 
+If you're using additional dependencies, make sure they are provided in the `pkg/requirements.txt` file (or update your Docker image accordingly, if you know Dockerfile format).
+
 Create an `.env` file at the root of the project with following contents:
 
 ```bash
