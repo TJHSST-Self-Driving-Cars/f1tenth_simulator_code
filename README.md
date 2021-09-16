@@ -146,8 +146,9 @@ F1TENTH_AGENT_NAME=a1
 F1TENTH_AGENT_IMAGE=a1
 RIDERS_CHALLENGE_ID=47
 RIDERS_API_HOST=https://api.riders.ai
-RIDERS_F1TENTH_HOST=https://f1tenth.riders.ai
 ```
+
+**NOTE:** If you're on Linux, change `ROS_MASTER_URI=http://host.docker.internal:11311` lines in `docker-compose.yml` with `ROS_MASTER_URI=http://172.17.0.1:11311`. Otherwise your separate Docker instances won't be able to find each other.
 
 Then, from the root of the project, build your submission:
 
