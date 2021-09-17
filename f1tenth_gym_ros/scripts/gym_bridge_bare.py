@@ -2,9 +2,12 @@
 import rospy
 import os
 from sensor_msgs.msg import LaserScan
+from geometry_msgs.msg import PoseWithCovariance, TwistWithCovariance
 from ackermann_msgs.msg import AckermannDriveStamped
+from tf.transformations import quaternion_from_euler
 
 from f1tenth_gym_ros.msg import RaceInfo
+from f1tenth_gym_ros.msg import Observation
 
 current_dir = os.path.abspath(os.path.dirname(__file__))
 package_dir = os.path.abspath(os.path.join(current_dir, ".."))
@@ -14,19 +17,81 @@ import gym
 import time
 
 
+def _to_odometry_msg(pose_x, pose_y, pose_theta, linear_vel_x, linear_vel_y, angular_vel_z, **kwargs):
+    pose = PoseWithCovariance()
+    pose.pose.position.x = pose_x
+    pose.pose.position.y = pose_y
+    quat = quaternion_from_euler(0., 0., pose_theta)
+    pose.pose.orientation.x = quat[0]
+    pose.pose.orientation.y = quat[1]
+    pose.pose.orientation.z = quat[2]
+    pose.pose.orientation.w = quat[3]
+
+    twist = TwistWithCovariance()
+    twist.twist.linear.x = linear_vel_x
+    twist.twist.linear.y = linear_vel_y
+    twist.twist.angular.z = angular_vel_z
+    return pose, twist
+
+
+def _to_scan_msg(ranges, angle_min, angle_max, angle_inc):
+    scan = LaserScan()
+    scan.angle_min = angle_min
+    scan.angle_max = angle_max
+    scan.angle_increment = angle_inc
+    scan.range_min = 0.
+    scan.range_max = 30.
+    scan.ranges = ranges
+    return scan
+
+
 class Agent(object):
-    def __init__(self, id, drive_callback):
+    def __init__(self, id, drive_callback, scan_fov, scan_beams):
         self.id = id
-        self.scan_topic = '/%s/scan' % self.id
-        self.drive_topic = '/%s/drive' % self.id
+
+        # params
+        self.angle_min = -scan_fov / 2.
+        self.angle_max = scan_fov / 2.
+        self.angle_inc = scan_fov / scan_beams
+
+        # observations
         self.collision = False
+        self.ego_obs = {}
+        self.opp_obs = {}
+
+        # motors
         self.requested_steer = 0.0
         self.requested_speed = 0.0
         self.drive_published = False
-        self.scan = False
-        self.scan_pub = rospy.Publisher(self.scan_topic, LaserScan, queue_size=1)
+
+        # topics
+        self.observations_topic = '/%s/observations' % self.id
+        self.drive_topic = '/%s/drive' % self.id
+        self.observations_pub = rospy.Publisher(self.observations_topic, Observation, queue_size=1)
         self.drive_sub = rospy.Subscriber(self.drive_topic, AckermannDriveStamped, drive_callback, queue_size=1)
 
+    def update_observersations(self, ego_obs, opp_obs):
+        self.ego_obs = ego_obs
+        self.opp_obs = opp_obs
+        self.collision = ego_obs['collision']
+
+    def publish_observations(self, ts):
+        observation = Observation()
+        observation.header.stamp = ts
+        observation.header.frame_id = 'agent_%s/observation' % self.id
+        observation.ranges = self.ego_obs['scan']
+
+        # calculate pose & twist
+        observation.ego_pose, observation.ego_twist = _to_odometry_msg(**self.ego_obs)
+        if self.opp_obs:
+            observation.opp_pose, observation.opp_twist = _to_odometry_msg(**self.opp_obs)
+
+        # send!
+        self.observations_pub.publish(observation)
+
+        # FIXME: Send /%/scan too.
+        scan = _to_scan_msg(self.ego_obs['scan'], self.angle_min, self.angle_max, self.angle_inc)
+        #
 
 class GymBridge(object):
 
@@ -38,9 +103,11 @@ class GymBridge(object):
         # this is filled when match is finished
         self.info = {}
 
-        self.agents.append(Agent(os.environ.get("EGO_ID"), self.drive_callback))
+        # Scan simulation params
+        scan_fov, scan_beams = rospy.get_param('scan_fov'), rospy.get_param('scan_beams')
+        self.agents.append(Agent(os.environ.get("EGO_ID"), self.drive_callback, scan_fov, scan_beams))
         if self.race_scenario > 0:
-            self.agents.append(Agent(os.environ.get('OPP_ID'), self.opp_drive_callback))
+            self.agents.append(Agent(os.environ.get('OPP_ID'), self.opp_drive_callback, scan_fov, scan_beams))
 
         # Topic Names
         self.race_info_topic = rospy.get_param('race_info_topic')
@@ -48,13 +115,6 @@ class GymBridge(object):
         # Map
         self.map_path = os.environ.get('RACE_MAP_PATH')
         self.map_img_ext = os.environ.get('RACE_MAP_IMG_EXT')
-
-        # Scan simulation params
-        scan_fov = rospy.get_param('scan_fov')
-        scan_beams = rospy.get_param('scan_beams')
-        self.angle_min = -scan_fov / 2.
-        self.angle_max = scan_fov / 2.
-        self.angle_inc = scan_fov / scan_beams
 
         # publishers
         self.info_pub = rospy.Publisher(self.race_info_topic, RaceInfo, queue_size=1)
@@ -82,7 +142,7 @@ class GymBridge(object):
         if os.environ.get("DISPLAY"):
             self.env.render()
 
-        self.update_sim_state()
+        self._update()
 
         # Timer
         self.timer = rospy.Timer(rospy.Duration(0.004), self.timer_callback)
@@ -100,12 +160,30 @@ class GymBridge(object):
 
         print("Shutting down F1Tenth Bridge")
 
-    def update_sim_state(self):
-        for i, scan in enumerate(self.obs['scans']):
-            self.agents[i].scan = scan
+    def _update(self):
+        # get keys from observations
+        # and redirects them to agents in singular form
+        keys = {
+            'scans': 'scan',
+            'poses_x': 'pose_x',
+            'poses_y': 'pose_y',
+            'poses_theta': 'pose_theta',
+            'linear_vels_x': 'linear_vel_x',
+            'linear_vels_y': 'linear_vel_y',
+            'ang_vels_z': 'angular_vel_z',
+            'collisions': 'collision',
+            'lap_times': 'lap_time',
+            'lap_counts': 'lap_count'
+        }
 
-        for i, collision in enumerate(self.obs['collisions']):
-            self.agents[i].collision = bool(collision)
+        # if single agent, we won't have opp obs
+        agent_0_obs = {single: self.obs[multi][0] for multi, single in keys.items()}
+        if len(self.agents) == 1:
+            return self.agents[0].update_observersations(agent_0_obs, None)
+
+        # if multi agent, we have opp obs
+        agent_1_obs = {single: self.obs[multi][1] for multi, single in keys.items()}
+        self.agents[1].update_observersations(agent_1_obs, agent_0_obs)
 
     def drive_callback(self, drive_msg):
         self.agents[0].requested_speed = drive_msg.drive.speed
@@ -129,7 +207,7 @@ class GymBridge(object):
         self.obs, _, self.done, _ = self.env.step(np.array(actions))
 
         # update scan data
-        self.update_sim_state()
+        self._update()
 
         # if match is completed, we set the bridge.info property
         if self.done:
@@ -151,27 +229,8 @@ class GymBridge(object):
             return
 
         ts = rospy.Time.now()
-
-        def generate_scan_message(name, ranges):
-            scan = LaserScan()
-            scan.header.stamp = ts
-            scan.header.frame_id = '%s/laser' % name
-            scan.angle_min = self.angle_min
-            scan.angle_max = self.angle_max
-            scan.angle_increment = self.angle_inc
-            scan.range_min = 0.
-            scan.range_max = 30.
-            scan.ranges = ranges
-            return scan
-
-        names = ["ego_racecar", "opp_racecar"]
-
         for i, agent in enumerate(self.agents):
-            scan = generate_scan_message(names[i], agent.scan)
-            try:
-                agent.scan_pub.publish(scan)
-            except Exception as e:
-                pass
+            agent.publish_observations(ts)
 
         # pub race info
         self.publish_race_info(ts)
@@ -194,6 +253,6 @@ if __name__ == '__main__':
     gym_bridge.spin()
 
     # once we're here, we know that competition is completed, so we publish info to API
-    print (gym_bridge.info)
+    print(gym_bridge.info)
 
     time.sleep(1)

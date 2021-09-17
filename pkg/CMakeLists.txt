@@ -7,7 +7,22 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   ackermann_msgs
+  message_generation
+)
+
+add_message_files(
+  FILES
+  Observation.msg
 )
 
 catkin_python_setup()
-catkin_package(CATKIN_DEPENDS)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+)
+
+catkin_package(
+  CATKIN_DEPENDS
+)
