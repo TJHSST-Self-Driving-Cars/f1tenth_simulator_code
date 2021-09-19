@@ -90,8 +90,7 @@ class Agent(object):
         self.observations_pub.publish(observation)
 
         # FIXME: Send /%/scan too.
-        scan = _to_scan_msg(self.ego_obs['scan'], self.angle_min, self.angle_max, self.angle_inc)
-        #
+
 
 class GymBridge(object):
 

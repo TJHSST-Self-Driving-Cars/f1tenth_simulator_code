@@ -38,13 +38,13 @@ Let's take a look at the most basic Driver, which is in the file [drivers.py](./
 ```python
 class SimpleDriver:    
 
-    def process_lidar(self, ranges):
+    def process_observation(self, lidar, ego_odom, opp_odom):
         speed = 5.0
         steering_angle = 0.0
         return speed, steering_angle
 ```
 
-A Driver is just a class that has a ```process_lidar``` function which takes in LiDAR data and returns a speed to drive at along with a steering angle.
+A Driver is just a class that has a ```process_observation``` function which takes in LiDAR data and returns a speed to drive at along with a steering angle.
 
 ```ranges```: an array of 1080 distances (ranges) detected by the LiDAR scanner. As the LiDAR scanner takes readings for the full 360&deg;, the angle between each range is 2&pi;/1080 (in radians).
 

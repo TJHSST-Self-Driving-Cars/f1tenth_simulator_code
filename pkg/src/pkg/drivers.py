@@ -255,5 +255,4 @@ class DisparityExtender:
         return speed, steering_angle
 
     def process_observation(self, ranges, ego_odom, opp_odom):
-        print(ego_odom, opp_odom)
         return self._process_lidar(ranges)
