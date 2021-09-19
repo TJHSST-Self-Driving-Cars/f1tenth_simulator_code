@@ -56,10 +56,7 @@ class ROSRunner:
     def observation_callback(self, data):
         self.last_healthy_time = time.time()
 
-        if hasattr(self.driver, 'process_lidar'):
-            # For users whom developed their lidar function
-            speed, angle = self.lidar_callback(data)
-        else:
+        if hasattr(self.driver, 'process_observation'):
             # FIXME: HANDLE Reversing odom to params & additional parameter to agents
             ego_odom = _unpack_odom(data.ego_pose, data.ego_twist)
             opp_odom = None
@@ -71,6 +68,10 @@ class ROSRunner:
                 ego_odom=ego_odom,
                 opp_odom=opp_odom
             )
+        elif hasattr(self.driver, 'process_lidar'):
+            # For users whom developed their lidar function
+            speed, angle = self.lidar_callback(data)
+
 
         # create message & publish
         msg = AckermannDriveStamped()

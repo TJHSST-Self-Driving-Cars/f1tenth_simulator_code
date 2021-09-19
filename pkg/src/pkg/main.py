@@ -75,9 +75,9 @@ class GymRunner(object):
                     else:
                         ego_odom, opp_odom = odom_1, odom_0
                     scan = obs['scans'][i]
-                    if hasattr(driver, 'process_lidar'):
+                    if hasattr(driver, 'process_observation'):
                         futures.append(executor.submit(driver.process_lidar, scan))
-                    elif hasattr(driver, 'process_observation'):
+                    elif hasattr(driver, 'process_lidar'):
                         futures.append(executor.submit(driver.process_observation, ranges=scan, ego_odom=ego_odom, opp_odom=opp_odom))
 
             for future in futures:
