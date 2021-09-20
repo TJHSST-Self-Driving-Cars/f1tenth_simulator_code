@@ -16,7 +16,7 @@ unset RIDERS_AUTH_TOKEN
 unset TOKEN_FILE
 
 SCRIPT_DIR=$(dirname "$0")
-TOKEN_FILE="${SCRIPT_DIR}/.riders-token"
+TOKEN_FILE="${SCRIPT_DIR}/../.riders-token"
 export TOKEN_FILE
 
 printf "\n\nThis script will compile your project & upload to Riders.ai for evaluation.\n"

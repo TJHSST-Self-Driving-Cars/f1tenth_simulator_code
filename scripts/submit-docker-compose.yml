@@ -11,6 +11,6 @@ services:
       - RIDERS_PASSWORD=${RIDERS_PASSWORD}
       - DESCRIPTION=${DESCRIPTION}
       - RIDERS_AUTH_TOKEN=${RIDERS_AUTH_TOKEN}
-      - TOKEN_FILE=${TOKEN_FILE}
+      - TOKEN_FILE=/project/.riders-token
     volumes:
       - ..:/project
