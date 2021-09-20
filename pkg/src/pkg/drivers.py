@@ -123,9 +123,6 @@ class AnotherDriver:
         return speed, steering_angle
 
 
-import numpy as np
-
-
 class DisparityExtender:
     CAR_WIDTH = 0.31
     # the min difference between adjacent LiDAR points for us to call them disparate
@@ -254,5 +251,5 @@ class DisparityExtender:
         speed = self.SPEED
         return speed, steering_angle
 
-    def process_observation(self, ranges, ego_odom, opp_odom):
+    def process_observation(self, ranges, ego_odom):
         return self._process_lidar(ranges)

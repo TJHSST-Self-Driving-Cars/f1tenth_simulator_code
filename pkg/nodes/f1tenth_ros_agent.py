@@ -25,7 +25,7 @@ def _unpack_odom(pose: PoseWithCovariance, twist: TwistWithCovariance):
     pose_y = pose.pose.position.y
 
     euler = euler_from_quaternion([pose.pose.orientation.x, pose.pose.orientation.y, pose.pose.orientation.z,
-                                  pose.pose.orientation.w])
+                                   pose.pose.orientation.w])
     pose_theta = euler[2]
 
     linear_vel_x = twist.twist.linear.x
@@ -51,6 +51,7 @@ class ROSRunner:
 
     def lidar_callback(self, data):
         ranges = np.asarray(data.ranges)
+        self.last_healthy_time = time.time()
         return self.driver.process_lidar(ranges)
 
     def observation_callback(self, data):
@@ -59,19 +60,13 @@ class ROSRunner:
         if hasattr(self.driver, 'process_observation'):
             # FIXME: HANDLE Reversing odom to params & additional parameter to agents
             ego_odom = _unpack_odom(data.ego_pose, data.ego_twist)
-            opp_odom = None
-            if data.opp_pose:
-                opp_odom = _unpack_odom(data.opp_pose, data.opp_twist)
-
             speed, angle = self.driver.process_observation(
                 ranges=data.ranges,
                 ego_odom=ego_odom,
-                opp_odom=opp_odom
             )
         elif hasattr(self.driver, 'process_lidar'):
             # For users whom developed their lidar function
             speed, angle = self.lidar_callback(data)
-
 
         # create message & publish
         msg = AckermannDriveStamped()
@@ -90,14 +85,17 @@ class ROSRunner:
         while not rospy.core.is_shutdown():
             current_time = time.time()
 
-            # if it passed more than 15 seconds since last sensor
+            # if it passed more than 5 seconds since last sensor
             # try to connect to ROS, if you cannot
-            if self.last_healthy_time and current_time > self.last_healthy_time + 1:
+            if self.last_healthy_time and current_time > self.last_healthy_time + 5:
                 try:
                     rosgraph.Master('/rostopic').getPid()
                 except socket.error:
+                    print ("ROS is shutdown, shutting down agent node")
                     return
                 else:
+                    print ("ROS is running, but agent didn't receive observation for a long time. ")
+                    print ("You can shutdown your agent docker container if you want to.")
                     self.last_healthy_time = time.time()
 
             rospy.rostime.wallsleep(0.04)
