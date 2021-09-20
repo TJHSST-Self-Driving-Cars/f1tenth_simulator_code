@@ -38,15 +38,28 @@ Let's take a look at the most basic Driver, which is in the file [drivers.py](./
 ```python
 class SimpleDriver:    
 
-    def process_observation(self, lidar, ego_odom, opp_odom):
+    def process_observation(self, ranges=None, ego_odom=None):
         speed = 5.0
         steering_angle = 0.0
         return speed, steering_angle
 ```
 
-A Driver is just a class that has a ```process_observation``` function which takes in LiDAR data and returns a speed to drive at along with a steering angle.
+A Driver is just a class that has a ```process_observation``` function which takes in  and odometry data and returns a speed to drive at along with a steering angle.
 
 ```ranges```: an array of 1080 distances (ranges) detected by the LiDAR scanner. As the LiDAR scanner takes readings for the full 360&deg;, the angle between each range is 2&pi;/1080 (in radians).
+
+``ego_odom``: A dict with following indices:
+
+```
+{
+  'pose_x': float,
+  'pose_y': float,
+  'pose_theta': float,
+  'linear_vel_x': float,
+  'linear_vel_y': float,
+  'angular_vel_z': float,
+}
+```
 
 ```steering_angle```: an angle in the range [-&pi;/2, &pi;/2], i.e. [-90&deg;, 90&deg;] in radians, with 0&deg; meaning straight ahead.
 
@@ -258,6 +271,26 @@ And you might see an error similar to
 gym 0.17.3 requires pyglet<=1.5.0,>=1.4.0, but you'll have pyglet 1.5.11 which is incompatible.
 ```
 which could be ignored. The environment should still work without error.
+
+## FAQ
+
+- How can I view the state of my submission?
+
+Go to [Submissions page](https://riders.ai/challenge/47/f1-tenth-iros-2021/submissions) in Riders.ai, and then click on **View Status** for the related submission. 
+
+If your agent has any issues (such as a syntax error), you will only see a single file "F1Tenth Bridge & Agent Log". By looking at this file you can understand why your agent haven't started (generally it's either a typo or an import issue).
+
+If your agent starts successfully, you'll see two other logs (one for timed trial and one for obstacle avoidance). 
+
+- How can I replay my submission?
+
+Download log for Timed Trial or Obstacle Avoidance results, these logs should be in .jsonl format. 
+
+Clone [F1Tenth Log Player](https://gitlab.com/acrome-colab/riders-poc/f1tenth-log-player) repo, update path of the log file in the main.py and run the Python file as described in the repo README.
+
+- How can I add requirements to my agent?
+
+If these are Python requirements, you can add these to the `pkg/requirements.txt` file, they will be automatically installed by the Agent docker image. If you want to add an arbitrary dependency, you'll need to update `compose/agent/Dockerfile`. Since these images are based on Ubuntu 20:04, you can use any dependency that's available with apt using `apt-get install -y {package-name}`.
 
 ## Citing
 If you find this Gym environment useful, please consider citing:
