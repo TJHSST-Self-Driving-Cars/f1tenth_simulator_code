@@ -168,7 +168,6 @@ class GymBridge(object):
         # Launch
         driver_count = len(self.agents)
         self.env = gym.make('f110_gym:f110-v0',
-                            timestep=self.DRIVE_TIMER_DURATION,
                             map=self.map_path[:-5],
                             map_ext=self.map_image_ext, num_agents=driver_count)
 
