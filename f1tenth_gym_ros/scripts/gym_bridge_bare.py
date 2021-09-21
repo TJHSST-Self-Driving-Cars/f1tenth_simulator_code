@@ -203,6 +203,9 @@ class GymBridge(object):
         while not self.done and not rospy.core.is_shutdown():
             rospy.rostime.wallsleep(0.04)
 
+            if RENDERING_ENABLED or os.environ.get("DISPLAY"):
+                self.env.render()
+
         self._finish()
 
         print("Shutting down F1Tenth Bridge")
@@ -227,10 +230,6 @@ class GymBridge(object):
         for i in range(len(self.agents)):
             obs = {single: self.obs[multi][i] for multi, single in keys.items()}
             self.agents[i].update_observersations(obs)
-
-        # TODO: We should decide whether we should move this to a plugin as well
-        if RENDERING_ENABLED:
-            self.env.render()
 
         for plugin in self.plugins:
             plugin.on_update(self.agents, self.obs, self.done)
