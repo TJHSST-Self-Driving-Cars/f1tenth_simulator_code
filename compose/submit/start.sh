@@ -44,8 +44,15 @@ printf "Compiled TAR GZ file for submission.\n"
 
 RIDERS_API_SUBMIT="${RIDERS_API_HOST}/api/v1/challenge/${RIDERS_CHALLENGE_ID}/submit/"
 
-curl --location \
-    -F 'file=@./challengeproject.tar.gz' \
-    -F description="$DESCRIPTION" \
-    -H "Authorization: TOKEN ${RIDERS_AUTH_TOKEN}" \
-    "${RIDERS_API_SUBMIT}"
+SUBMIT_RESPONSE=$(curl --location -F 'file=@./challengeproject.tar.gz' -F description="$description" -H "Authorization: TOKEN ${RIDERS_AUTH_TOKEN}" "${RIDERS_API_SUBMIT}")
+
+printf "\n\n----\n\n"
+SUBMIT_RESPONSE_DETAIL=$(echo $SUBMIT_RESPONSE | jq -c '.detail' | tr -d '"')
+if [[ -z ${SUBMIT_RESPONSE_DETAIL} ]]; then
+  echo $SUBMIT_RESPONSE
+  echo "Submission uploaded successfully!"
+  echo "If you'd like to view your results, visit https://riders.ai/challenge/47/ and then choose <Results> from menu."
+  echo "Please note that it may take up to 15 minutes for your results to show up."
+else
+  echo $SUBMIT_RESPONSE_DETAIL
+fi
