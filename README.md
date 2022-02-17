@@ -2,6 +2,13 @@
 
 Sample project for the F1Tenth challenges, most recent being F1Tenth IROS 2021 (https://riders.ai/challenge/47/f1-tenth-iros-2021/). 
 
+## Requirements
+
+* Python 3.8
+* Pip 22.0.3
+
+There can be issues with installation when using older pip versions. 
+
 ## Installation
 
 Clone this repository and install required packages:
