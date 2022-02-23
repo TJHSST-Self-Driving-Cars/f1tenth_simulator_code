@@ -15,7 +15,7 @@ Clone this repository and install required packages:
 
 ```bash
 git clone https://gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart --config core.autocrlf=input
-cd f1tenth-gym-quickstart
+cd f1tenth-riders-quickstart
 pip install --user -e gym
 ```
 
