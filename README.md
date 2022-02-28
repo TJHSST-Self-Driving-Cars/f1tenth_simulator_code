@@ -1,6 +1,6 @@
 # The F1TENTH - Riders
 
-Sample project for the F1Tenth challenges, most recent being F1Tenth IROS 2021 (https://riders.ai/challenge/47/f1-tenth-iros-2021/). 
+This is a sample project for [F1Tenth](https://f1tenth.org) challenges, the most recent being [F1Tenth ICRA 2022](https://riders.ai/challenge/67/f1-tenth-icra-2022/aboutCompetition). 
 
 ## Requirements
 
@@ -28,11 +28,11 @@ python -m pkg.main
 
 ## Entering the Competition
 
-* Signup to the competition platform [Riders.ai](http://riders.ai/) (if you haven't already)
-* Go to [My Account > Purchases](https://riders.ai/account/purchases)
-* Enter the Redeem Code you have been provided (or ask an organizer for one!)
-* Once the (free) purchase is successful, go to your Riders.ai Dashboard, now you should be able to see F1Tenth IROS 2021 Challenge there
-* Follow that link and click on Join Competition (Note: this creates a Challenge Group, and makes you the admin of that group. If you want multiple people to compete on the same Team, one of you should Join, and then invite the others from Challenge > My Team page).
+* Sign up to the competition platform [Riders.ai](http://riders.ai/), if you haven't already.
+* Go to [My Account > Purchases](https://riders.ai/account/purchases).
+* Enter the Redeem Code you have been provided (or ask an organizer for one).
+* Once the (free) purchase is successful, go to your [Riders.ai Dashboard](https://riders.ai/dashboard/index). Now, you should be able to see F1Tenth ICRA 2022 challenge there, under Recent Challenges.
+* Follow [that link](https://riders.ai/challenge/67/f1-tenth-icra-2022/aboutCompetition) and click Join Competition button (Note: this creates a Challenge Group, and makes you the admin of that group. If you want other people to compete with you on the same Team, you should invite them from [Challenge > My Team](https://riders.ai/challenge/67/f1-tenth-icra-2022/team) page).
 
 ## Developing your Driver
 
@@ -283,7 +283,7 @@ which could be ignored. The environment should still work without error.
 
 - How can I view the state of my submission?
 
-Go to [Submissions page](https://riders.ai/challenge/47/f1-tenth-iros-2021/submissions) in Riders.ai, and then click on **View Status** for the related submission. 
+Go to [Submissions page](https://riders.ai/challenge/67/f1-tenth-icra-2022/submissions) in Riders.ai, and then click on **View Status** for the related submission. 
 
 If your agent has any issues (such as a syntax error), you will only see a single file "F1Tenth Bridge & Agent Log". By looking at this file you can understand why your agent haven't started (generally it's either a typo or an import issue).
 
