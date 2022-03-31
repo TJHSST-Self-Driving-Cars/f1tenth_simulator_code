@@ -10,10 +10,10 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_dir)
 
 # import your drivers here
-from pkg.drivers import DisparityExtender
+from pkg.drivers import *
 
 # choose your drivers here (1-4)
-drivers = [DisparityExtender()]
+drivers = [GapFollower()]
 
 # choose your racetrack here (SOCHI, SOCHI_OBS)
 RACETRACK = 'SOCHI'
