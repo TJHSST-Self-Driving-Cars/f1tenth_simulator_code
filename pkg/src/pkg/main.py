@@ -16,7 +16,7 @@ from pkg.drivers import *
 drivers = [GapFollower()]
 
 # choose your racetrack here (SOCHI, SOCHI_OBS)
-RACETRACK = 'SOCHI'
+RACETRACK = 'SILVERSTONE_OBS'
 
 
 def _pack_odom(obs, i):
