@@ -14,7 +14,7 @@ There can be issues with installation when using older pip versions.
 Clone this repository and install required packages:
 
 ```bash
-git clone https://gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart --config core.autocrlf=input
+git clone https://github.com/TJHSST-Self-Driving-Cars/f1tenth_simulator_code.git
 cd f1tenth-riders-quickstart
 pip install --user -e gym
 ```
