@@ -4,14 +4,17 @@ import numpy as np
 import concurrent.futures
 import os
 import sys
-
+import math
 # Get ./src/ folder & add it to path
 current_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_dir)
-
+prevx = 0
+prevy = 0
 # import your drivers here
 from pkg.drivers import DisparityExtender
-
+with open("stats.csv", "a+") as csv:
+    csv.write(str("X")+","+ str("Y")+","+ str("speed")+","+str("direction")+","+str("angular_vel")+","+str("DX")+","+str("DY"))
+    csv.write("\n")
 # choose your drivers here (1-4)
 drivers = [DisparityExtender()]
 
@@ -79,6 +82,31 @@ class GymRunner(object):
                         futures.append(executor.submit(driver.process_observation, ranges=scan, ego_odom=ego_odom))
                     elif hasattr(driver, 'process_lidar'):
                         futures.append(executor.submit(driver.process_lidar, scan))
+                global prevx
+                global prevy
+                currentx = odom_0['pose_x']
+                currenty = odom_0['pose_y']
+                deltax = currentx-prevx
+                deltay = currenty-prevy
+                direction = math.degrees(math.atan(deltay/deltax))
+                if(deltax<0):
+                    direction +=180
+                elif(deltax>0 and deltay<0):
+                    direction+=360
+                speed = ((currentx-prevx)**2+(currenty-prevy)**2)**(1/2)
+                print("X: "+str(currentx)+"\t\t"+"Y: "+ str(currenty)+"\t\t"+"speed: "+ str(speed)+"\t\t"+"direction: "+str(direction)+"\t\t"+"angular velocity: "+str(odom_0["angular_vel_z"])) 
+                if(deltax!=0):
+                    
+                    with open("stats.csv", "a+") as csv:
+                        csv.write(str(currentx)+","+ str(currenty)+","+ str(speed)+","+str(direction)+","+str(odom_0["angular_vel_z"])+","+str(currentx-prevx)+","+str(currenty-prevy))
+                        csv.write("\n")
+                else:
+                    print("BRUH ZERO DELTAX")
+               
+                    
+                #left rotation = positive angular velocity
+                prevx = currentx
+                prevy = currenty
 
             for future in futures:
                 speed, steer = future.result()
