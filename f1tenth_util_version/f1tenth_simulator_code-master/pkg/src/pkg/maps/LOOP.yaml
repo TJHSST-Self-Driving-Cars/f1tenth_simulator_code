@@ -1,0 +1,8 @@
+image: LOOP.png
+resolution: 0.07712
+origin: [-49.742399999999996, -26.991999999999997, 0.0]
+negate: 0
+occupied_thresh: 0.45
+free_thresh: 0.196
+starting_angle: 0
+default_resolution: 0.07712
