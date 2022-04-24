@@ -6,8 +6,8 @@ class GapFollower:
     PREPROCESS_CONV_SIZE = 3
     BEST_POINT_CONV_SIZE = 80
     MAX_LIDAR_DIST = 3000000
-    STRAIGHTS_SPEED = 8.0
-    CORNERS_SPEED = 5.0
+    STRAIGHTS_SPEED = 10.0
+    CORNERS_SPEED = 4.0
     STRAIGHTS_STEERING_ANGLE = np.pi / 18  # 10 degrees
 
     def __init__(self):
@@ -86,10 +86,13 @@ class GapFollower:
 
         # Publish Drive message
         steering_angle = self.get_angle(best, len(proc_ranges))
+        '''
         if abs(steering_angle) > self.STRAIGHTS_STEERING_ANGLE:
             speed = self.CORNERS_SPEED
         else:
             speed = self.STRAIGHTS_SPEED
+        '''
+        speed = max(self.CORNERS_SPEED, self.STRAIGHTS_SPEED - abs(steering_angle) * 4)
         print('Steering angle in degrees: {}'.format((steering_angle / (np.pi / 2)) * 90))
         return speed, steering_angle
 
