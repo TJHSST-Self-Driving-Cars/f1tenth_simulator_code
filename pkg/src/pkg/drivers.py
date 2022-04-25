@@ -1,4 +1,7 @@
+import math
 import numpy as np
+from simple_pid import PID
+import csv
 
 
 class GapFollower:
@@ -8,11 +11,11 @@ class GapFollower:
     PREPROCESS_CONV_SIZE = 3
     BEST_POINT_CONV_SIZE = 80
     MAX_LIDAR_DIST = 3000000
-    STRAIGHTS_SPEED = 9.0
+    STRAIGHTS_SPEED = 10.0
     CORNERS_SPEED = 4.0
     STRAIGHTS_STEERING_ANGLE = np.pi / 18  # 10 degrees
-    SPEED_ADJUSTMENT_FACTOR = 0.8
-    STEERING_ADJUSTMENT_FACTOR = 0.75
+    SPEED_ADJUSTMENT_FACTOR = 1.0
+    STEERING_ADJUSTMENT_FACTOR = 1.0
 
     def __init__(self):
         # used when calculating the angles of the LiDAR data
@@ -99,6 +102,37 @@ class GapFollower:
         speed = max(self.CORNERS_SPEED, self.STRAIGHTS_SPEED - abs(steering_angle) * 4) * self.SPEED_ADJUSTMENT_FACTOR
         print('Steering angle in degrees: {}'.format((steering_angle / (np.pi / 2)) * 90))
         return speed, steering_angle
+
+
+class PIDVelocity:
+    """ Shell code for PID velocity controller using waypoints from optimized raceline. 
+        To be used for future controllers which use geometric steering control with the raceline. 
+    """
+
+    def __init__(self, waypoints = "waypoints.csv"):
+        file = open(waypoints)
+        csvreader = csv.reader(file)
+        header = []
+        header = next(csvreader)
+        raceline_table = []
+        for row in csvreader:
+            raceline_table.append(row)
+
+        pid = PID(2.5, 0.5, 0.15, setpoint = raceline_table[1]) # next waypoint, so NOT 0
+        pid.sample_time = 0.01 # see step_reward in main.py 
+
+    def process_observation(self, ranges, ego_odom):
+        # calculate velocity
+        vel_x = ego_odom["linear_vel_x"]
+        vel_y = ego_odom["linear_vel_y"]
+        vel = math.sqrt(vel_x ** 2 + vel_y ** 2)
+
+        self.pid.setpoint = self.raceline_table[2] # logic for which waypoint to use comes in the geometric controller
+        speed = self.pid(vel)
+        return speed, 0.0 # dummy steering angle
+
+    def __del__(self):
+        self.file.close()
 
 
 # drives straight ahead at a speed of 5

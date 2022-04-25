@@ -5,18 +5,19 @@ import concurrent.futures
 import os
 import sys
 import math
+
 # Get ./src/ folder & add it to path
 current_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_dir)
 prevx = 0
 prevy = 0
 # import your drivers here
-from pkg.drivers import DisparityExtender
+from pkg.drivers import *
 with open("stats.csv", "a+") as csv:
     csv.write(str("X")+","+ str("Y")+","+ str("speed")+","+str("direction")+","+str("angular_vel")+","+str("DX")+","+str("DY"))
     csv.write("\n")
 # choose your drivers here (1-4)
-drivers = [DisparityExtender()]
+drivers = [GapFollower()]
 
 # choose your racetrack here (SOCHI, SOCHI_OBS)
 RACETRACK = 'Oschersleben_map'

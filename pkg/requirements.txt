@@ -1,2 +1,3 @@
 # add your dependencies here as you'd like
 Pillow==8.3.2
+simple_pid==1.0.1
