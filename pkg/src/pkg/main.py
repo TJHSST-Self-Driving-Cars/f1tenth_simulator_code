@@ -9,18 +9,23 @@ import math
 # Get ./src/ folder & add it to path
 current_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_dir)
-prevx = 0
-prevy = 0
+
 # import your drivers here
-from pkg.drivers import *
+from pkg.drivers import GapFollower
+from pkg.drivers import DisparityExtender
+
+# choose your drivers here (1-4)
+drivers = [DisparityExtender()]
+
+# choose your racetrack here (Oschersleben, SOCHI, SOCHI_OBS)
+RACETRACK = 'Oschersleben'
+
+# telemetry
 with open("stats.csv", "a+") as csv:
     csv.write(str("X")+","+ str("Y")+","+ str("speed")+","+str("direction")+","+str("angular_vel")+","+str("DX")+","+str("DY"))
     csv.write("\n")
-# choose your drivers here (1-4)
-drivers = [GapFollower()]
-
-# choose your racetrack here (SOCHI, SOCHI_OBS)
-RACETRACK = 'Oschersleben_map'
+prevx = 0
+prevy = 0
 
 
 def _pack_odom(obs, i):
@@ -50,12 +55,25 @@ class GymRunner(object):
         # specify starting positions of each agent
         driver_count = len(drivers)
         if driver_count == 1:
-            poses = np.array([[0.8007017, -0.2753365, 4.1421595]])
+            if 'SOCHI'.lower() in RACETRACK.lower():
+                poses = np.array([[0.8007017, -0.2753365, 4.1421595]])
+            elif 'Oschersleben'.lower() in RACETRACK.lower():
+                poses = np.array([[0.0702245, 0.3002981, 2.79787]])
+            else:
+                raise ValueError("Initial position is unknown for map '{}'.".format(RACETRACK))
         elif driver_count == 2:
-            poses = np.array([
-                [0.8007017, -0.2753365, 4.1421595],
-                [0.8162458, 1.1614572, 4.1446321],
-            ])
+            if 'SOCHI'.lower() in RACETRACK.lower():
+                poses = np.array([
+                    [0.8007017, -0.2753365, 4.1421595],
+                    [0.8162458, 1.1614572, 4.1446321],
+                ])
+            elif 'Oschersleben'.lower() in RACETRACK.lower():
+                poses = np.array([
+                    [0.0702245, 0.3002981, 2.79787],
+                    [0.9966514, -0.9306893, 2.79787],
+                ])
+            else:
+                raise ValueError("Initial positions are unknown for map '{}'.".format(RACETRACK))
         else:
             raise ValueError("Max 2 drivers are allowed")
 
@@ -83,6 +101,7 @@ class GymRunner(object):
                         futures.append(executor.submit(driver.process_observation, ranges=scan, ego_odom=ego_odom))
                     elif hasattr(driver, 'process_lidar'):
                         futures.append(executor.submit(driver.process_lidar, scan))
+
                 global prevx
                 global prevy
                 currentx = odom_0['pose_x']
@@ -101,10 +120,6 @@ class GymRunner(object):
                     with open("stats.csv", "a+") as csv:
                         csv.write(str(currentx)+","+ str(currenty)+","+ str(speed)+","+str(direction)+","+str(odom_0["angular_vel_z"])+","+str(currentx-prevx)+","+str(currenty-prevy))
                         csv.write("\n")
-                else:
-                    print("BRUH ZERO DELTAX")
-               
-                    
                 #left rotation = positive angular velocity
                 prevx = currentx
                 prevy = currenty

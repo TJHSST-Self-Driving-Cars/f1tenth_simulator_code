@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 
-
 """
 Rendering engine for f1tenth gym env based on pyglet and OpenGL
 Author: Hongrui Zheng
@@ -41,7 +40,7 @@ from f110_gym.envs.collision_models import get_vertices
 
 # zooming constants
 ZOOM_IN_FACTOR = 1.2
-ZOOM_OUT_FACTOR = 1/ZOOM_IN_FACTOR
+ZOOM_OUT_FACTOR = 1 / ZOOM_IN_FACTOR
 
 # vehicle shape constants
 CAR_LENGTH = 0.58
@@ -51,10 +50,12 @@ CAR_WIDTH = 0.31
 BACKGROUND_COLOR = (0., 0., 0., 0.)
 DRAWINGS_COLOR = [255, 0, 0, 255]
 
+
 class EnvRenderer(pyglet.window.Window):
     """
     A window class inherited from pyglet.window.Window, handles the camera/projection interaction, resizing window, and rendering the environment
     """
+
     def __init__(self, width, height, *args, **kwargs):
         """
         Class constructor
@@ -76,10 +77,10 @@ class EnvRenderer(pyglet.window.Window):
         glClearColor(*BACKGROUND_COLOR)
 
         # initialize camera values
-        self.left = -width/2
-        self.right = width/2
-        self.bottom = -height/2
-        self.top = height/2
+        self.left = -width / 2
+        self.right = width / 2
+        self.bottom = -height / 2
+        self.top = height / 2
         self.zoom_level = 1.2
         self.zoomed_width = width
         self.zoomed_height = height
@@ -89,7 +90,7 @@ class EnvRenderer(pyglet.window.Window):
 
         # current env map
         self.map_points = None
-        
+
         # current env agent poses, (num_agents, 3), columns are (x, y, theta)
         self.poses = None
 
@@ -154,7 +155,8 @@ class EnvRenderer(pyglet.window.Window):
         map_mask_flat = map_mask.flatten()
         map_points = 50. * map_coords[:, map_mask_flat].T
         for i in range(map_points.shape[0]):
-            self.batch.add(1, GL_POINTS, None, ('v3f/stream', [map_points[i, 0], map_points[i, 1], map_points[i, 2]]), ('c3B/stream', DRAWINGS_COLOR[:3]))
+            self.batch.add(1, GL_POINTS, None, ('v3f/stream', [map_points[i, 0], map_points[i, 1], map_points[i, 2]]),
+                           ('c3B/stream', DRAWINGS_COLOR[:3]))
         self.map_points = map_points
 
     def on_resize(self, width, height):
@@ -176,10 +178,10 @@ class EnvRenderer(pyglet.window.Window):
 
         # update camera value
         (width, height) = self.get_size()
-        self.left = -self.zoom_level * width/2
-        self.right = self.zoom_level * width/2
-        self.bottom = -self.zoom_level * height/2
-        self.top = self.zoom_level * height/2
+        self.left = -self.zoom_level * width / 2
+        self.right = self.zoom_level * width / 2
+        self.bottom = -self.zoom_level * height / 2
+        self.top = self.zoom_level * height / 2
         self.zoomed_width = self.zoom_level * width
         self.zoomed_height = self.zoom_level * height
 
@@ -224,16 +226,15 @@ class EnvRenderer(pyglet.window.Window):
 
         # If zoom_level is in the proper range
         if .01 < self.zoom_level * f < 10:
-
             self.zoom_level *= f
 
             (width, height) = self.get_size()
 
-            mouse_x = x/width
-            mouse_y = y/height
+            mouse_x = x / width
+            mouse_y = y / height
 
-            mouse_x_in_world = self.left + mouse_x*self.zoomed_width
-            mouse_y_in_world = self.bottom + mouse_y*self.zoomed_height
+            mouse_x_in_world = self.left + mouse_x * self.zoomed_width
+            mouse_y_in_world = self.bottom + mouse_y * self.zoomed_height
 
             self.zoomed_width *= f
             self.zoomed_height *= f
@@ -323,12 +324,14 @@ class EnvRenderer(pyglet.window.Window):
                 if i == self.ego_idx:
                     vertices_np = get_vertices(np.array([0., 0., 0.]), CAR_LENGTH, CAR_WIDTH)
                     vertices = list(vertices_np.flatten())
-                    car = self.batch.add(4, GL_QUADS, None, ('v2f', vertices), ('c3B', [172, 97, 185, 172, 97, 185, 172, 97, 185, 172, 97, 185]))
+                    car = self.batch.add(4, GL_QUADS, None, ('v2f', vertices),
+                                         ('c3B', [172, 97, 185, 172, 97, 185, 172, 97, 185, 172, 97, 185]))
                     self.cars.append(car)
                 else:
                     vertices_np = get_vertices(np.array([0., 0., 0.]), CAR_LENGTH, CAR_WIDTH)
                     vertices = list(vertices_np.flatten())
-                    car = self.batch.add(4, GL_QUADS, None, ('v2f', vertices), ('c3B', [99, 52, 94, 99, 52, 94, 99, 52, 94, 99, 52, 94]))
+                    car = self.batch.add(4, GL_QUADS, None, ('v2f', vertices),
+                                         ('c3B', [99, 52, 94, 99, 52, 94, 99, 52, 94, 99, 52, 94]))
                     self.cars.append(car)
 
         poses = np.stack((poses_x, poses_y, poses_theta)).T

@@ -1,12 +1,7 @@
-import math
 import numpy as np
-from simple_pid import PID
-import csv
 
 
 class GapFollower:
-    """ CURRENTLY A WORK IN PROGRESS FOR THE OSCHERSCHLEBEN MAP. CRASHES ON THE LAST TURN. 
-    """
     BUBBLE_RADIUS = 160
     PREPROCESS_CONV_SIZE = 3
     BEST_POINT_CONV_SIZE = 80
@@ -14,8 +9,6 @@ class GapFollower:
     STRAIGHTS_SPEED = 10.0
     CORNERS_SPEED = 4.0
     STRAIGHTS_STEERING_ANGLE = np.pi / 18  # 10 degrees
-    SPEED_ADJUSTMENT_FACTOR = 1.0
-    STEERING_ADJUSTMENT_FACTOR = 1.0
 
     def __init__(self):
         # used when calculating the angles of the LiDAR data
@@ -92,47 +85,15 @@ class GapFollower:
         best = self.find_best_point(gap_start, gap_end, proc_ranges)
 
         # Publish Drive message
-        steering_angle = self.get_angle(best, len(proc_ranges)) * self.STEERING_ADJUSTMENT_FACTOR
-        '''
-        if abs(steering_angle) > self.STRAIGHTS_STEERING_ANGLE:
-            speed = self.CORNERS_SPEED
-        else:
-            speed = self.STRAIGHTS_SPEED
-        '''
+        steering_angle = self.get_angle(best, len(proc_ranges))
+        # if abs(steering_angle) > self.STRAIGHTS_STEERING_ANGLE:
+        #     speed = self.CORNERS_SPEED
+        # else:
+        #     speed = self.STRAIGHTS_SPEED
+
         speed = max(self.CORNERS_SPEED, self.STRAIGHTS_SPEED - abs(steering_angle) * 4) * self.SPEED_ADJUSTMENT_FACTOR
-        print('Steering angle in degrees: {}'.format((steering_angle / (np.pi / 2)) * 90))
+        # print('Steering angle in degrees: {}'.format((steering_angle / (np.pi / 2)) * 90))
         return speed, steering_angle
-
-
-class PIDVelocity:
-    """ Shell code for PID velocity controller using waypoints from optimized raceline. 
-        To be used for future controllers which use geometric steering control with the raceline. 
-    """
-
-    def __init__(self, waypoints = "waypoints.csv"):
-        file = open(waypoints)
-        csvreader = csv.reader(file)
-        header = []
-        header = next(csvreader)
-        raceline_table = []
-        for row in csvreader:
-            raceline_table.append(row)
-
-        pid = PID(2.5, 0.5, 0.15, setpoint = raceline_table[1]) # next waypoint, so NOT 0
-        pid.sample_time = 0.01 # see step_reward in main.py 
-
-    def process_observation(self, ranges, ego_odom):
-        # calculate velocity
-        vel_x = ego_odom["linear_vel_x"]
-        vel_y = ego_odom["linear_vel_y"]
-        vel = math.sqrt(vel_x ** 2 + vel_y ** 2)
-
-        self.pid.setpoint = self.raceline_table[2] # logic for which waypoint to use comes in the geometric controller
-        speed = self.pid(vel)
-        return speed, 0.0 # dummy steering angle
-
-    def __del__(self):
-        self.file.close()
 
 
 # drives straight ahead at a speed of 5
@@ -276,7 +237,7 @@ class DisparityExtender:
         steering_angle = np.clip(lidar_angle, np.radians(-90), np.radians(90))
         return steering_angle
 
-    def _process_lidar(self, ranges):
+    def process_lidar(self, ranges):
         """ Run the disparity extender algorithm!
             Possible improvements: varying the speed based on the
             steering angle or the distance to the farthest point.
@@ -291,6 +252,3 @@ class DisparityExtender:
                                                  len(proc_ranges))
         speed = self.SPEED
         return speed, steering_angle
-
-    def process_observation(self, ranges, ego_odom):
-        return self._process_lidar(ranges)

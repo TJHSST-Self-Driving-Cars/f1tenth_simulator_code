@@ -1,6 +1,6 @@
 #!/bin/bash
 
-RIDERS_CHALLENGE_ID=47
+RIDERS_CHALLENGE_ID=67
 RIDERS_API_HOST=https://api.riders.ai
 RIDERS_F1TENTH_HOST=https://f1tenth.riders.ai
 
