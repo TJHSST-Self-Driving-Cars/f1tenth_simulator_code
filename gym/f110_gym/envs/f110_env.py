@@ -147,8 +147,7 @@ class F110Env(gym.Env, utils.EzPickle):
         self.poses_y = []
         self.poses_theta = []
         self.collisions = np.zeros((self.num_agents, ))
-        # TODO: collision_idx not used yet
-        # self.collision_idx = -1 * np.ones((self.num_agents, ))
+        self.collision_idx = np.zeros((self.num_agents, ))
 
         # loop completion
         self.near_start = True
@@ -223,7 +222,7 @@ class F110Env(gym.Env, utils.EzPickle):
             if self.toggle_list[i] < 4:
                 self.lap_times[i] = self.current_time
         
-        done = (self.collisions[self.ego_idx]) or np.all(self.toggle_list >= 4)
+        done = np.all(self.collisions > 0) or np.all(self.toggle_list >= 4)
         
         return done, self.toggle_list >= 4
 

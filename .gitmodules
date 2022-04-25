@@ -1,3 +1,0 @@
-[submodule "pkg/src/pkg/maps"]
-	path = pkg/src/pkg/maps
-	url = https://github.com/TJHSST-Self-Driving-Cars/maps

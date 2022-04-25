@@ -174,13 +174,28 @@ class GymBridge(object):
         print("Gym is ready. Resetting environment...")
 
         # init gym backend
+        map_config_filename = os.path.basename(self.map_path)
         if driver_count == 1:
-            poses = np.array([[0.8007017, -0.2753365, 4.1421595]])
+            # TODO: Why don't we read these positions from yaml?
+            if 'SOCHI'.lower() in map_config_filename.lower():
+                poses = np.array([[0.8007017, -0.2753365, 4.1421595]])
+            elif 'Oschersleben'.lower() in map_config_filename.lower():
+                poses = np.array([[0.0702245, 0.3002981, 2.79787]])
+            else:
+                raise ValueError("Initial position is unknown for map '{}'.".format(map_config_filename))
         elif driver_count == 2:
-            poses = np.array([
-                [0.8007017, -0.2753365, 4.1421595],
-                [0.8162458, 1.1614572, 4.1446321],
-            ])
+            if 'SOCHI'.lower() in map_config_filename.lower():
+                poses = np.array([
+                    [0.8007017, -0.2753365, 4.1421595],
+                    [0.8162458, 1.1614572, 4.1446321],
+                ])
+            elif 'Oschersleben'.lower() in map_config_filename.lower():
+                poses = np.array([
+                    [0.0702245, 0.3002981, 2.79787],
+                    [0.9966514, -0.9306893, 2.79787],
+                ])
+            else:
+                raise ValueError("Initial positions are unknown for map '{}'.".format(map_config_filename))
         else:
             raise ValueError("Max 2 drivers are allowed")
 

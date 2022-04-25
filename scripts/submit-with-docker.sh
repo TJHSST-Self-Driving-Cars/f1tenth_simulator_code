@@ -47,4 +47,4 @@ export DESCRIPTION
 docker-compose -f scripts/submit-docker-compose.yml build submit
 docker-compose -f scripts/submit-docker-compose.yml up submit
 
-printf "Submission successful! Please go to https://riders.ai/challenge/47/submissions to validate."
+printf "Submission successful! Please go to https://riders.ai/challenge/67/submissions to validate."
