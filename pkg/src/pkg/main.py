@@ -19,7 +19,7 @@ with open("stats.csv", "a+") as csv:
 drivers = [DisparityExtender()]
 
 # choose your racetrack here (SOCHI, SOCHI_OBS)
-RACETRACK = 'SOCHI'
+RACETRACK = 'Oschersleben_map'
 
 
 def _pack_odom(obs, i):

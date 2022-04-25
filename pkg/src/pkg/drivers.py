@@ -2,13 +2,17 @@ import numpy as np
 
 
 class GapFollower:
+    """ CURRENTLY A WORK IN PROGRESS FOR THE OSCHERSCHLEBEN MAP. CRASHES ON THE LAST TURN. 
+    """
     BUBBLE_RADIUS = 160
     PREPROCESS_CONV_SIZE = 3
     BEST_POINT_CONV_SIZE = 80
     MAX_LIDAR_DIST = 3000000
-    STRAIGHTS_SPEED = 10.0
+    STRAIGHTS_SPEED = 9.0
     CORNERS_SPEED = 4.0
     STRAIGHTS_STEERING_ANGLE = np.pi / 18  # 10 degrees
+    SPEED_ADJUSTMENT_FACTOR = 0.8
+    STEERING_ADJUSTMENT_FACTOR = 0.75
 
     def __init__(self):
         # used when calculating the angles of the LiDAR data
@@ -85,14 +89,14 @@ class GapFollower:
         best = self.find_best_point(gap_start, gap_end, proc_ranges)
 
         # Publish Drive message
-        steering_angle = self.get_angle(best, len(proc_ranges))
+        steering_angle = self.get_angle(best, len(proc_ranges)) * self.STEERING_ADJUSTMENT_FACTOR
         '''
         if abs(steering_angle) > self.STRAIGHTS_STEERING_ANGLE:
             speed = self.CORNERS_SPEED
         else:
             speed = self.STRAIGHTS_SPEED
         '''
-        speed = max(self.CORNERS_SPEED, self.STRAIGHTS_SPEED - abs(steering_angle) * 4)
+        speed = max(self.CORNERS_SPEED, self.STRAIGHTS_SPEED - abs(steering_angle) * 4) * self.SPEED_ADJUSTMENT_FACTOR
         print('Steering angle in degrees: {}'.format((steering_angle / (np.pi / 2)) * 90))
         return speed, steering_angle
 
