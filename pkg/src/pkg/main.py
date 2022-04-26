@@ -9,7 +9,7 @@ import math
 # Get ./src/ folder & add it to path
 current_dir = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(current_dir)
-
+import time
 # import your drivers here
 from pkg.drivers import GapFollower
 from pkg.drivers import DisparityExtender
@@ -21,9 +21,9 @@ drivers = [DisparityExtender()]
 RACETRACK = 'Oschersleben'
 
 # telemetry
-with open("stats.csv", "a+") as csv:
-    csv.write(str("X")+","+ str("Y")+","+ str("speed")+","+str("direction")+","+str("angular_vel")+","+str("DX")+","+str("DY"))
-    csv.write("\n")
+csv = open(str(time.time())+"stats.csv", "w+")
+csv.write(str("X")+","+ str("Y")+","+ str("speed")+","+str("direction")+","+str("angular_vel")+","+str("DX")+","+str("DY"))
+csv.write("\n")
 prevx = 0
 prevy = 0
 
@@ -117,9 +117,9 @@ class GymRunner(object):
                 print("X: "+str(currentx)+"\t\t"+"Y: "+ str(currenty)+"\t\t"+"speed: "+ str(speed)+"\t\t"+"direction: "+str(direction)+"\t\t"+"angular velocity: "+str(odom_0["angular_vel_z"])) 
                 if(deltax!=0):
                     
-                    with open("stats.csv", "a+") as csv:
-                        csv.write(str(currentx)+","+ str(currenty)+","+ str(speed)+","+str(direction)+","+str(odom_0["angular_vel_z"])+","+str(currentx-prevx)+","+str(currenty-prevy))
-                        csv.write("\n")
+                    
+                    csv.write(str(currentx)+","+ str(currenty)+","+ str(speed)+","+str(direction)+","+str(odom_0["angular_vel_z"])+","+str(currentx-prevx)+","+str(currenty-prevy))
+                    csv.write("\n")
                 #left rotation = positive angular velocity
                 prevx = currentx
                 prevy = currenty
