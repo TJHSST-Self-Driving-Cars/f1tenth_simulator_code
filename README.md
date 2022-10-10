@@ -4,17 +4,36 @@ This is a sample project for [F1Tenth](https://f1tenth.org) challenges, the most
 
 ## Requirements
 
-* Python 3.8
-* Pip 22.0.3
+* Python 3.8/3.9
+* Pip 22.0.3 (or greater)
 
 There can be issues with installation when using older pip versions. 
 
-## Installation
+To check pip version and upgrade pip:
+```bash
+pip --version
+python -m pip install --upgrade pip
+```
+## Installation (School Computers)
+* Click on the green "Code" button and then "Download ZIP". 
+* Unzip the ZIP file. Open it in VSCode using "Open Folder".
+* In VSCode, use `Ctrl-Shift-P` to open the status bar and enter `Terminal: Create new Terminal`
+* Run the upgrade pip command (above).
+* Run these commands:
+```bash
+pip install --user -e gym
+cd pkg/src
+python -m pkg.main
+```
+
+After about 20-30 seconds you should see a window pop up with a moving purple rectangle-this is the car!
+
+## Installation (Non-School Computers)
 
 Clone this repository and install required packages:
 
 ```bash
-git clone https://gitlab.com/acrome-colab/riders-poc/f1tenth-riders-quickstart --config core.autocrlf=input
+(run the git clone command)
 cd f1tenth-riders-quickstart
 pip install --user -e gym
 ```
@@ -25,14 +44,6 @@ Finally, check if the repo is working properly:
 cd pkg/src
 python -m pkg.main
 ```
-
-## Entering the Competition
-
-* Sign up to the competition platform [Riders.ai](http://riders.ai/), if you haven't already.
-* Go to [My Account > Purchases](https://riders.ai/account/purchases).
-* Enter the Redeem Code you have been provided (or ask an organizer for one).
-* Once the (free) purchase is successful, go to your [Riders.ai Dashboard](https://riders.ai/dashboard/index). Now, you should be able to see F1Tenth ICRA 2022 challenge there, under Recent Challenges.
-* Follow [that link](https://riders.ai/challenge/67/f1-tenth-icra-2022/aboutCompetition) and click Join Competition button (Note: this creates a Challenge Group, and makes you the admin of that group. If you want other people to compete with you on the same Team, you should invite them from [Challenge > My Team](https://riders.ai/challenge/67/f1-tenth-icra-2022/team) page).
 
 ## Developing your Driver
 
@@ -59,12 +70,12 @@ A Driver is just a class that has a ```process_observation``` function which tak
 
 ```
 {
-  'pose_x': float,
-  'pose_y': float,
-  'pose_theta': float,
-  'linear_vel_x': float,
-  'linear_vel_y': float,
-  'angular_vel_z': float,
+  'pose_x': float, the car's position in x
+  'pose_y': float, the car's position in y
+  'pose_theta': float, the car's current orientation
+  'linear_vel_x': float, the x component of the car's velocity
+  'linear_vel_y': float, the y component of the car's velocity
+  'angular_vel_z': float, the rate of rotation of the car
 }
 ```
 
