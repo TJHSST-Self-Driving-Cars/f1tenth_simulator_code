@@ -1,27 +1,32 @@
 # The F1TENTH - Riders
 
-This is a sample project for [F1Tenth](https://f1tenth.org) challenges, the most recent being [F1Tenth ICRA 2022](https://riders.ai/challenge/67/f1-tenth-icra-2022/aboutCompetition). 
+This is a sample project for [F1Tenth](https://f1tenth.org) challenges, the most recent being [F1Tenth ICRA 2022](https://riders.ai/challenge/67/f1-tenth-icra-2022/aboutCompetition).
 
 ## Requirements
 
 * Python 3.8/3.9
 * Pip 22.0.3 (or greater)
 
-There can be issues with installation when using older pip versions. 
+There can be issues with installation when using older pip versions.
 
 To check pip version and upgrade pip:
+
 ```bash
 pip --version
 python -m pip install --upgrade pip
 ```
+
 ## Installation (School Computers)
-* Click on the green "Code" button and then "Download ZIP". 
+
+* Click on the green "Code" button and then "Download ZIP".
 * Unzip the ZIP file. Open it in VSCode using "Open Folder".
 * In VSCode, use `Ctrl-Shift-P` to open the status bar and enter `Terminal: Create new Terminal`
 * Run the upgrade pip command (above).
 * Run these commands:
+
 ```bash
 pip install --user -e gym
+pip install pyglet
 cd pkg/src
 python -m pkg.main
 ```
@@ -54,7 +59,7 @@ To develop your driver you can work in the folder [pkg/src/pkg](./pkg/src/pkg).
 Let's take a look at the most basic Driver, which is in the file [drivers.py](./pkg/src/pkg/drivers.py)
 
 ```python
-class SimpleDriver:    
+class SimpleDriver:  
 
     def process_observation(self, ranges=None, ego_odom=None):
         speed = 5.0
@@ -62,9 +67,9 @@ class SimpleDriver:
         return speed, steering_angle
 ```
 
-A Driver is just a class that has a ```process_observation``` function which takes in  and odometry data and returns a speed to drive at along with a steering angle.
+A Driver is just a class that has a ``process_observation`` function which takes in  and odometry data and returns a speed to drive at along with a steering angle.
 
-```ranges```: an array of 1080 distances (ranges) detected by the LiDAR scanner. As the LiDAR scanner takes readings for the full 360&deg;, the angle between each range is 2&pi;/1080 (in radians).
+``ranges``: an array of 1080 distances (ranges) detected by the LiDAR scanner. As the LiDAR scanner takes readings for the full 360&deg;, the angle between each range is 2&pi;/1080 (in radians).
 
 ``ego_odom``: A dict with following indices:
 
@@ -79,7 +84,7 @@ A Driver is just a class that has a ```process_observation``` function which tak
 }
 ```
 
-```steering_angle```: an angle in the range [-&pi;/2, &pi;/2], i.e. [-90&deg;, 90&deg;] in radians, with 0&deg; meaning straight ahead.
+``steering_angle``: an angle in the range [-&pi;/2, &pi;/2], i.e. [-90&deg;, 90&deg;] in radians, with 0&deg; meaning straight ahead.
 
 ### Choosing a Driver
 
@@ -116,11 +121,11 @@ Now if you run the main.py file again, it uses our SimpleDriver
 $ python main.py
 ```
 
-To see some more complex processing, take a look at the GapFollower Driver which implements the [Follow The Gap Method](https://www.youtube.com/watch?v=7VLYP-z9hTw&ab_channel=Real-TimemLABUPenn)! Notice that it still has a ```process_lidar``` function which takes in LiDAR data and returns a speed and steering angle. That's all we'll ever need.
+To see some more complex processing, take a look at the GapFollower Driver which implements the [Follow The Gap Method](https://www.youtube.com/watch?v=7VLYP-z9hTw&ab_channel=Real-TimemLABUPenn)! Notice that it still has a ``process_lidar`` function which takes in LiDAR data and returns a speed and steering angle. That's all we'll ever need.
 
 ### Multi-Agent Racing
 
-To practice racing multiple Drivers against eachother, simply choose multiple Drivers! You may choose up to 4 drivers, but in practice the simulator will usually run very slowly if you choose more than 2. You may race the same Driver against itself by choosing it twice. If you try racing GapFollower against itself, you will find that it is not good at multi-agent racing! 
+To practice racing multiple Drivers against eachother, simply choose multiple Drivers! You may choose up to 4 drivers, but in practice the simulator will usually run very slowly if you choose more than 2. You may race the same Driver against itself by choosing it twice. If you try racing GapFollower against itself, you will find that it is not good at multi-agent racing!
 
 Here's how we would race GapFollower against SimpleDriver:
 
@@ -199,19 +204,19 @@ Start ROSCore & F1Tenth ROS Bridge:
 docker-compose up --force-recreate roscore-dev bridge-dev
 ```
 
-Go to http://localhost:6080 , if everything worked properly until now, you should see simulator window. 
+Go to http://localhost:6080 , if everything worked properly until now, you should see simulator window.
 
-Finally, from another terminal, launch the Driver agent:   
+Finally, from another terminal, launch the Driver agent:
 
 ```bash
 docker-compose up --force-recreate agent-dev
-``` 
+```
 
 You should see your agent start driving along the track.
 
 ## Submitting
 
-Requirements for running the submission script: 
+Requirements for running the submission script:
 
 Move into the [scripts](./scripts) directory and run the submission file:
 
@@ -243,6 +248,7 @@ If you don't have Docker or get any error, follow this instructions.
 ```bash
 wsl.exe -l -v
 ```
+
 - Here, you can see the linux distro you installed in step 6. You need to set your chosen distro as default, run:
 
 ```bash
@@ -251,7 +257,7 @@ wsl --set-default <distro name>
 
 For example, to set Ubuntu as your default WSL distro, run:
 
- ```bash
+```bash
  wsl --set-default ubuntu
 ```
 
@@ -268,41 +274,47 @@ If previous options don't work, you can try to upload with Python script:
 ```bash
 pip install docker six
 python scripts/submit-with-docker.py
-``` 
+```
+
 Enter your credentials and this script should start a docker container in backend that completes submission. After submission make sure that you visit Submissions page to validate newly created submission.
 In 15 minutes, visit Results page to view results of your agent.
 
 ## Known issues (from original repo)
 
 - If you run the `pip install...` command above and then later change your file structure in some way, you may get errors with `gym` such as `module 'gym' has no attribute 'make'`. The solution to this is to re-run the command `pip install --user -e gym/`.
-
 - On MacOS Big Sur and above, when rendering is turned on, you might encounter the error:
+
 ```
 ImportError: Can't find framework /System/Library/Frameworks/OpenGL.framework.
 ```
+
 You can fix the error by installing a newer version of pyglet:
+
 ```bash
 $ pip3 install pyglet==1.5.11
 ```
+
 And you might see an error similar to
+
 ```
 gym 0.17.3 requires pyglet<=1.5.0,>=1.4.0, but you'll have pyglet 1.5.11 which is incompatible.
 ```
+
 which could be ignored. The environment should still work without error.
 
 ## FAQ
 
 - How can I view the state of my submission?
 
-Go to [Submissions page](https://riders.ai/challenge/67/f1-tenth-icra-2022/submissions) in Riders.ai, and then click on **View Status** for the related submission. 
+Go to [Submissions page](https://riders.ai/challenge/67/f1-tenth-icra-2022/submissions) in Riders.ai, and then click on **View Status** for the related submission.
 
 If your agent has any issues (such as a syntax error), you will only see a single file "F1Tenth Bridge & Agent Log". By looking at this file you can understand why your agent haven't started (generally it's either a typo or an import issue).
 
-If your agent starts successfully, you'll see two other logs (one for timed trial and one for obstacle avoidance). 
+If your agent starts successfully, you'll see two other logs (one for timed trial and one for obstacle avoidance).
 
 - How can I replay my submission?
 
-Download log for Timed Trial or Obstacle Avoidance results, these logs should be in .jsonl format. 
+Download log for Timed Trial or Obstacle Avoidance results, these logs should be in .jsonl format.
 
 Clone [F1Tenth Log Player](https://gitlab.com/acrome-colab/riders-poc/f1tenth-log-player) repo, update path of the log file in the main.py and run the Python file as described in the repo README.
 
@@ -311,6 +323,7 @@ Clone [F1Tenth Log Player](https://gitlab.com/acrome-colab/riders-poc/f1tenth-lo
 If these are Python requirements, you can add these to the `pkg/requirements.txt` file, they will be automatically installed by the Agent docker image. If you want to add an arbitrary dependency, you'll need to update `compose/agent/Dockerfile`. Since these images are based on Ubuntu 20:04, you can use any dependency that's available with apt using `apt-get install -y {package-name}`.
 
 ## Citing
+
 If you find this Gym environment useful, please consider citing:
 
 ```
