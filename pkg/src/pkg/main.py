@@ -86,7 +86,7 @@ class GymRunner(object):
             actions = np.array(actions)
             obs, step_reward, done, info = env.step(actions)
             laptime += step_reward
-            env.render(mode='human')
+            env.render(mode='human_fast')
 
         print('Sim elapsed time:', laptime, 'Real elapsed time:', time.time() - start)
 
