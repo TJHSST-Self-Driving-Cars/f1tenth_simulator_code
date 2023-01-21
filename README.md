@@ -34,7 +34,7 @@ Clone this repository and install required packages:
 
 ```bash
 (run the git clone command)
-cd f1tenth-riders-quickstart
+cd f1tenth_simulator_code
 pip install --user -e gym
 ```
 
